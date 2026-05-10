@@ -1,0 +1,37 @@
+{
+  "name": "sarajevo-hotspot",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --experimental-https --experimental-https-key ./certs/key.pem --experimental-https-cert ./certs/cert.pem",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.6.1",
+    "@types/leaflet": "^1.9.21",
+    "firebase": "^12.12.1",
+    "leaflet": "^1.9.4",
+    "maplibre-gl": "^5.24.0",
+    "next": "16.2.4",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-leaflet": "^5.0.0",
+    "three": "^0.184.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.4",
+    "gltf-pipeline": "^4.3.1",
+    "obj2gltf": "^3.2.0",
+    "selfsigned": "^5.5.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
