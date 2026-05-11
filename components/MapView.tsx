@@ -73,6 +73,7 @@ interface MapViewProps {
   onMarkerClick: (location: Location) => void;
   navTarget?: Location | null;
   navMode?: "foot" | "car";
+  onNavModeChange?: (mode: "foot" | "car") => void;
   onClearNav?: () => void;
 }
 
@@ -83,6 +84,7 @@ export default function MapView({
   onMarkerClick,
   navTarget,
   navMode = "foot",
+  onNavModeChange,
   onClearNav,
 }: MapViewProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -490,6 +492,40 @@ export default function MapView({
             )}
           </div>
 
+          {/* Walk / Drive mode toggle */}
+          <div className="flex bg-white/[0.06] rounded-xl border border-white/[0.08] p-0.5 flex-shrink-0">
+            <button
+              onClick={() => onNavModeChange?.("foot")}
+              title="Walking"
+              className="w-8 h-8 flex items-center justify-center rounded-[9px] transition-all duration-200"
+              style={navMode === "foot"
+                ? { background: "rgba(168,85,247,0.35)", color: "#c084fc" }
+                : { color: "rgba(255,255,255,0.35)" }}
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="4" r="2"/>
+                <path d="M9 20l1.5-5 2 2 1.5-3 1.5 6"/>
+                <path d="M6.5 13.5C7.5 11.5 9.5 10.5 12 10.5s4.5 1 5.5 3"/>
+              </svg>
+            </button>
+            <button
+              onClick={() => onNavModeChange?.("car")}
+              title="Driving"
+              className="w-8 h-8 flex items-center justify-center rounded-[9px] transition-all duration-200"
+              style={navMode === "car"
+                ? { background: "rgba(48,128,255,0.35)", color: "#60a5fa" }
+                : { color: "rgba(255,255,255,0.35)" }}
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="1" y="11" width="22" height="7" rx="2"/>
+                <path d="M5 11V7a2 2 0 012-2h10a2 2 0 012 2v4"/>
+                <circle cx="7" cy="18" r="1.5"/>
+                <circle cx="17" cy="18" r="1.5"/>
+              </svg>
+            </button>
+          </div>
+
+          {/* Overview / 3D toggle */}
           <div className="flex bg-white/[0.06] rounded-xl border border-white/[0.08] p-0.5 flex-shrink-0">
             <button
               onClick={() => setViewMode("overview")}

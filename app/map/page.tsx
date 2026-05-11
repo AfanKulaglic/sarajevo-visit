@@ -251,6 +251,7 @@ export default function MapPage() {
               onMarkerClick={handleCheckIn}
               navTarget={navTarget}
               navMode={navMode}
+              onNavModeChange={(m) => setNavMode(m)}
               onClearNav={() => setNavTarget(null)}
             />
           </div>
