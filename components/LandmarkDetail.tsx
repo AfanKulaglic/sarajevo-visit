@@ -99,7 +99,7 @@ function NavMenu({ loc, onClose, onNavigate }: { loc: Location; onClose: () => v
           </div>
           <div className="min-w-0">
             <p className="text-white text-[14px] font-semibold">{t("nav_google_maps")}</p>
-            <p className="text-[12px] mt-0.5" style={{ color: accent.color }}>via {mode === "car" ? "driving" : "walking"} · opens Google Maps</p>
+            <p className="text-[12px] mt-0.5" style={{ color: accent.color }}>via {mode === "car" ? "driving" : "walking"} &mdash; opens Google Maps</p>
           </div>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="2.5" strokeLinecap="round" className="flex-shrink-0">
             <path d="M7 17L17 7M17 7H7M17 7v10"/>
@@ -121,7 +121,7 @@ function NavMenu({ loc, onClose, onNavigate }: { loc: Location; onClose: () => v
           </div>
           <div className="min-w-0">
             <p className="text-white text-[14px] font-semibold">{t("nav_show_on_map")}</p>
-            <p className="text-[12px] mt-0.5" style={{ color: accent.color }}>via {mode === "car" ? "driving" : "walking"} · route on this map</p>
+            <p className="text-[12px] mt-0.5" style={{ color: accent.color }}>via {mode === "car" ? "driving" : "walking"} &mdash; route on this map</p>
           </div>
         </button>
 
