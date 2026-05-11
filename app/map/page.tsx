@@ -42,6 +42,7 @@ export default function MapPage() {
   const [showList, setShowList] = useState(false);
   const [discoveredLoc, setDiscoveredLoc] = useState<Location | null>(null);
   const [navTarget, setNavTarget] = useState<Location | null>(null);
+  const [navMode, setNavMode] = useState<"foot" | "car">("foot");
   const [locationPermission, setLocationPermission] = useState<"unknown" | "granted" | "denied">("unknown");
   const [deviceType, setDeviceType] = useState<"ios" | "android" | "unknown">("unknown");
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -125,7 +126,8 @@ export default function MapPage() {
     [checkingId, collect, hasCollected]
   );
 
-  function handleNavigateInApp(loc: Location) {
+  function handleNavigateInApp(loc: Location, mode: "foot" | "car") {
+    setNavMode(mode);
     setNavTarget(loc);
     setShowList(false);
     setDiscoveredLoc(null); // close detail overlay so the map is visible
@@ -248,6 +250,7 @@ export default function MapPage() {
               userPosition={userPosition}
               onMarkerClick={handleCheckIn}
               navTarget={navTarget}
+              navMode={navMode}
               onClearNav={() => setNavTarget(null)}
             />
           </div>

@@ -10,19 +10,22 @@ const NavigateIcon = () => (
   </svg>
 );
 
-function NavMenu({ loc, onClose, onNavigate }: { loc: Location; onClose: () => void; onNavigate?: (loc: Location) => void }) {
-  const { t, lang, getLocContent } = useLanguage();
+function NavMenu({ loc, onClose, onNavigate }: { loc: Location; onClose: () => void; onNavigate?: (loc: Location, mode: "foot" | "car") => void }) {
+  const { t, getLocContent } = useLanguage();
   const displayName = getLocContent(loc).name;
+  const [mode, setMode] = useState<"foot" | "car">("foot");
+
   function openGoogle() {
+    const travelmode = mode === "car" ? "driving" : "walking";
     window.open(
-      `https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lng}&travelmode=walking`,
+      `https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lng}&travelmode=${travelmode}`,
       "_blank", "noopener,noreferrer"
     );
     onClose();
   }
 
   function openNative() {
-    onNavigate?.(loc);
+    onNavigate?.(loc, mode);
     onClose();
   }
 
@@ -45,6 +48,33 @@ function NavMenu({ loc, onClose, onNavigate }: { loc: Location; onClose: () => v
         <p className="text-[11px] font-bold text-white/30 uppercase tracking-[0.18em] px-5 pt-5 pb-3">
           {t("nav_navigate_to")} {displayName}
         </p>
+
+        {/* Travel mode toggle */}
+        <div className="px-5 pb-4">
+          <div className="flex gap-2 p-1 rounded-2xl" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
+            <button
+              onClick={() => setMode("foot")}
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-200"
+              style={mode === "foot" ? { background: "rgba(168,85,247,0.22)", color: "#c084fc", border: "1px solid rgba(168,85,247,0.35)" } : { color: "rgba(255,255,255,0.35)", border: "1px solid transparent" }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="5" r="1.5"/><path d="M9 20l1-5 2 2 1-2 1 5"/><path d="M6.5 14.5S8 12 12 12s5.5 2.5 5.5 2.5"/>
+              </svg>
+              Walking
+            </button>
+            <button
+              onClick={() => setMode("car")}
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-200"
+              style={mode === "car" ? { background: "rgba(48,128,255,0.2)", color: "#60a5fa", border: "1px solid rgba(48,128,255,0.35)" } : { color: "rgba(255,255,255,0.35)", border: "1px solid transparent" }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 17H3a2 2 0 01-2-2V9a2 2 0 012-2h1l2-3h10l2 3h1a2 2 0 012 2v6a2 2 0 01-2 2h-2"/><circle cx="7.5" cy="17.5" r="1.5"/><circle cx="16.5" cy="17.5" r="1.5"/>
+              </svg>
+              Driving
+            </button>
+          </div>
+        </div>
+
         <button
           onClick={openGoogle}
           className="w-full flex items-center gap-4 px-5 py-4 text-left active:bg-white/[0.04] transition-colors"
@@ -57,7 +87,7 @@ function NavMenu({ loc, onClose, onNavigate }: { loc: Location; onClose: () => v
           </div>
           <div>
             <p className="text-white text-[15px] font-semibold">{t("nav_google_maps")}</p>
-            <p className="text-white/40 text-[12px] mt-0.5">{t("nav_google_maps_sub")}</p>
+            <p className="text-white/40 text-[12px] mt-0.5">{mode === "car" ? "Open in Google Maps (driving)" : "Open in Google Maps (walking)"}</p>
           </div>
         </button>
         <div className="h-px bg-white/[0.05] mx-5" />
@@ -75,7 +105,7 @@ function NavMenu({ loc, onClose, onNavigate }: { loc: Location; onClose: () => v
           </div>
           <div>
             <p className="text-white text-[15px] font-semibold">{t("nav_show_on_map")}</p>
-            <p className="text-white/40 text-[12px] mt-0.5">{t("nav_show_on_map_sub")}</p>
+            <p className="text-white/40 text-[12px] mt-0.5">{mode === "car" ? "Show route on app map (driving)" : "Show route on app map (walking)"}</p>
           </div>
         </button>
         <div className="px-5 pb-5 pt-2">
@@ -98,7 +128,7 @@ interface LocationCardProps {
   distance: number | null;
   onCheckIn: () => void;
   checking: boolean;
-  onNavigate?: (loc: Location) => void;
+  onNavigate?: (loc: Location, mode: "foot" | "car") => void;
 }
 
 export default function LocationCard({

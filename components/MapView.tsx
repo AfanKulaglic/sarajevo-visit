@@ -52,6 +52,15 @@ function formatWalkTime(meters: number): string {
   return m === 0 ? `${h}h` : `${h}h ${m}min`;
 }
 
+function formatDriveTime(meters: number): string {
+  const minutes = Math.round(meters / 500); // ~30 km/h city average
+  if (minutes < 1) return "< 1 min";
+  if (minutes < 60) return `${minutes} min`;
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return m === 0 ? `${h}h` : `${h}h ${m}min`;
+}
+
 function bearingToLabel(deg: number): string {
   const labels = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
   return labels[Math.round(deg / 45) % 8];
@@ -63,6 +72,7 @@ interface MapViewProps {
   userPosition: GpsPosition | null;
   onMarkerClick: (location: Location) => void;
   navTarget?: Location | null;
+  navMode?: "foot" | "car";
   onClearNav?: () => void;
 }
 
@@ -72,6 +82,7 @@ export default function MapView({
   userPosition,
   onMarkerClick,
   navTarget,
+  navMode = "foot",
   onClearNav,
 }: MapViewProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -351,8 +362,9 @@ export default function MapView({
 
       if (userPosition) {
         try {
+          const profile = navMode === "car" ? "driving" : "foot";
           const url =
-            "https://router.project-osrm.org/route/v1/foot/" +
+            `https://router.project-osrm.org/route/v1/${profile}/` +
             `${userPosition.lng},${userPosition.lat};${navTarget.lng},${navTarget.lat}` +
             "?overview=full&geometries=geojson";
           const res = await fetch(url);
@@ -389,6 +401,15 @@ export default function MapView({
         ],
       });
 
+      // Update route line color based on travel mode
+      if (mapRef.current.getLayer("route-line")) {
+        mapRef.current.setPaintProperty(
+          "route-line",
+          "line-color",
+          navMode === "car" ? "#3080ff" : "#a855f7"
+        );
+      }
+
       const lngs = coords.map(([lng]) => lng);
       const lats = coords.map(([, lat]) => lat);
       mapRef.current.fitBounds(
@@ -405,7 +426,7 @@ export default function MapView({
       cancelled = true;
       clearTimeout(t);
     };
-  }, [mapReady, navTarget, userPosition]);
+  }, [mapReady, navTarget, userPosition, navMode]);
 
   return (
     <div className="w-full h-full relative">
@@ -416,22 +437,32 @@ export default function MapView({
           className="absolute top-3 left-3 right-3 z-[1000] flex items-center gap-3 px-3 py-3 rounded-2xl"
           style={{
             background: "rgba(14,11,26,0.93)",
-            border: "1px solid rgba(168,85,247,0.35)",
+            border: navMode === "car" ? "1px solid rgba(48,128,255,0.35)" : "1px solid rgba(168,85,247,0.35)",
             backdropFilter: "blur(16px)",
             boxShadow: "0 4px 24px rgba(0,0,0,0.5)",
           }}
         >
           <span className="text-xl flex-shrink-0">{navTarget.emoji}</span>
           <div className="flex-1 min-w-0">
-            <p className="text-purple-300 text-[11px] font-semibold uppercase tracking-wider opacity-70">
-              Navigating to
+            <p className="text-[11px] font-semibold uppercase tracking-wider opacity-70 flex items-center gap-1.5"
+               style={{ color: navMode === "car" ? "#60a5fa" : "#c084fc" }}>
+              {navMode === "car" ? (
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 17H3a2 2 0 01-2-2V9a2 2 0 012-2h1l2-3h10l2 3h1a2 2 0 012 2v6a2 2 0 01-2 2h-2"/><circle cx="7.5" cy="17.5" r="1.5"/><circle cx="16.5" cy="17.5" r="1.5"/>
+                </svg>
+              ) : (
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="5" r="1.5"/><path d="M9 20l1-5 2 2 1-2 1 5"/><path d="M6.5 14.5S8 12 12 12s5.5 2.5 5.5 2.5"/>
+                </svg>
+              )}
+              {navMode === "car" ? "Driving to" : "Walking to"}
             </p>
             <p className="text-white text-[13px] font-semibold truncate">
               {navTarget.name}
             </p>
             {(routeDistanceM !== null || straightDistM !== null) && (
               <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-                <span className="text-purple-300 text-[13px] font-bold">
+                <span className="text-[13px] font-bold" style={{ color: navMode === "car" ? "#60a5fa" : "#c084fc" }}>
                   {routeDistanceM !== null
                     ? formatDistance(routeDistanceM)
                     : straightDistM !== null
@@ -440,7 +471,9 @@ export default function MapView({
                 </span>
                 <span className="text-white/30 text-[11px]">·</span>
                 <span className="text-white/55 text-[11px]">
-                  {formatWalkTime(routeDistanceM ?? straightDistM ?? 0)} walk
+                  {navMode === "car"
+                    ? `${formatDriveTime(routeDistanceM ?? straightDistM ?? 0)} drive`
+                    : `${formatWalkTime(routeDistanceM ?? straightDistM ?? 0)} walk`}
                 </span>
                 {userPosition && (
                   <>
