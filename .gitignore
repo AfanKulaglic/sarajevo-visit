@@ -24,6 +24,15 @@
 .DS_Store
 *.pem
 
+# Legacy OBJ/MTL model folders (large files, replaced by GLB in public/models/glb/)
+/public/models/Monument to the Murdered Children/
+/public/models/Multicultural Man/
+"/public/models/Vijećnica/"
+/public/models/clock tower 3d model/
+/public/models/eternal+flame+torus+3d+model/
+/public/models/sebilj+3d+model/
+/certs/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
