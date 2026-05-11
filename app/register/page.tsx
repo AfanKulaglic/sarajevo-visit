@@ -47,8 +47,8 @@ export default function RegisterPage() {
       <div className="w-full max-w-sm relative anim-fade-up">
         {/* Brand */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-[72px] h-[72px] rounded-[20px] bg-purple-500/[0.08] border border-purple-500/[0.14] text-[44px] mb-4">
-            🐺
+          <div className="inline-flex items-center justify-center w-[72px] h-[72px] rounded-[20px] bg-purple-500/[0.08] border border-purple-500/[0.14] mb-4 overflow-hidden">
+            <img src="/icons/logo.png" alt="Saraya Explore" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-[22px] font-bold text-white tracking-tight">Sarajevo Hotspot</h1>
           <p className="text-white/35 text-sm mt-1.5">Start your journey through the city</p>
