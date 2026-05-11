@@ -52,7 +52,7 @@ function NavMenu({ loc, onClose, onNavigate }: { loc: Location; onClose: () => v
           <p className="text-white/35 text-[12px]">Choose travel mode and open directions</p>
         </div>
 
-        {/* Mode toggle — full width, prominent */}
+        {/* Mode toggle - full width, prominent */}
         <div className="px-4 pb-4">
           <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.18em] mb-2">Travel Mode</p>
           <div className="grid grid-cols-2 gap-2">
@@ -134,19 +134,6 @@ function NavMenu({ loc, onClose, onNavigate }: { loc: Location; onClose: () => v
           <button
             onClick={onClose}
             className="w-full py-3.5 rounded-2xl text-[14px] font-semibold text-white/40"
-            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}
-          >
-            {t("btn_cancel")}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-        <div className="px-5 pb-5 pt-2">
-          <button
-            onClick={onClose}
-            className="w-full py-3.5 rounded-2xl text-[14px] font-semibold text-white/50 transition-colors active:bg-white/[0.04]"
             style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}
           >
             {t("btn_cancel")}

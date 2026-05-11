@@ -48,7 +48,7 @@ function NavMenu({ loc, onClose, onNavigate }: { loc: Location; onClose: () => v
           <p className="text-white/35 text-[12px]">Choose travel mode and open directions</p>
         </div>
 
-        {/* Mode toggle — full width, prominent */}
+        {/* Mode toggle - full width, prominent */}
         <div className="px-4 pb-4">
           <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.18em] mb-2">Travel Mode</p>
           <div className="grid grid-cols-2 gap-2">
