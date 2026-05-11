@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useRef, useEffect } from "react";
 import { locations } from "@/lib/locations";
 
@@ -8,14 +8,14 @@ import { locations } from "@/lib/locations";
 ─────────────────────────────────────────────────────────────────────────── */
 
 const PURPLE = "#8B5CF6";
-const GOLD = "#F59E0B";
-const GOLD_DIM = "rgba(245,158,11,0.15)";
-const GOLD_BORDER = "rgba(245,158,11,0.38)";
+const BLUE = "#3080FF";
+const BLUE_DIM = "rgba(48,128,255,0.15)";
+const BLUE_BORDER = "rgba(48,128,255,0.38)";
 const PURPLE_DIM = "rgba(139,92,246,0.18)";
 const PURPLE_BORDER = "rgba(139,92,246,0.4)";
-const BG = "#07040D";
-const SURFACE = "#0E0B1A";
-const BORDER = "rgba(255,255,255,0.06)";
+const BG = "#0D0D12";
+const SURFACE = "#111118";
+const BORDER = "rgba(255,255,255,0.07)";
 const TEXT_DIM = "rgba(255,255,255,0.38)";
 const TEXT_MID = "rgba(255,255,255,0.65)";
 const W = 1280;
@@ -54,7 +54,7 @@ const koraci = [
 // ── helpers ───────────────────────────────────────────────────────────────
 
 function Blob({ x, y, size, opacity = 0.18, gold }: { x: number; y: number; size: number; opacity?: number; gold?: boolean }) {
-  const c = gold ? "245,158,11" : "139,92,246";
+  const c = gold ? "48,128,255" : "139,92,246";
   return <div style={{ position: "absolute", left: x, top: y, width: size, height: size, borderRadius: "50%", background: `radial-gradient(circle, rgba(${c},${opacity}) 0%, transparent 70%)`, pointerEvents: "none" }} />;
 }
 
@@ -68,7 +68,7 @@ function GridLines() {
 }
 
 function Tag({ children, gold }: { children: React.ReactNode; gold?: boolean }) {
-  return <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: gold ? GOLD_DIM : PURPLE_DIM, border: `1px solid ${gold ? GOLD_BORDER : PURPLE_BORDER}`, borderRadius: 99, padding: "4px 14px", color: gold ? GOLD : PURPLE, fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", marginBottom: 14 }}>{children}</div>;
+  return <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: gold ? BLUE_DIM : PURPLE_DIM, border: `1px solid ${gold ? BLUE_BORDER : PURPLE_BORDER}`, borderRadius: 99, padding: "4px 14px", color: gold ? BLUE : PURPLE, fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", marginBottom: 14 }}>{children}</div>;
 }
 
 function H2({ children }: { children: React.ReactNode }) {
@@ -76,21 +76,21 @@ function H2({ children }: { children: React.ReactNode }) {
 }
 
 function Grad({ children }: { children: React.ReactNode }) {
-  return <span style={{ background: `linear-gradient(90deg, ${PURPLE}, #C084FC)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{children}</span>;
+  return <span style={{ background: `linear-gradient(90deg, ${PURPLE}, #A78BFA, ${BLUE})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{children}</span>;
 }
 
 function GG({ children }: { children: React.ReactNode }) {
-  return <span style={{ background: `linear-gradient(90deg, ${GOLD}, #FCD34D)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{children}</span>;
+  return <span style={{ background: `linear-gradient(90deg, ${BLUE}, #60A5FA)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{children}</span>;
 }
 
 function RainbowBar() {
-  return <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, transparent, ${PURPLE}, ${GOLD}, transparent)` }} />;
+  return <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, transparent, ${PURPLE}, ${BLUE}, transparent)` }} />;
 }
 
 function SarayaLogo({ size = 14 }: { size?: number }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-      <div style={{ width: size * 1.8, height: size * 1.8, borderRadius: size * 0.38, background: `linear-gradient(135deg, ${PURPLE}, #C084FC)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: size * 0.85, fontWeight: 900, color: "white" }}>S</div>
+      <div style={{ width: size * 1.8, height: size * 1.8, borderRadius: size * 0.38, background: `linear-gradient(135deg, ${PURPLE}, ${BLUE})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: size * 0.85, fontWeight: 900, color: "white" }}>S</div>
       <span style={{ fontSize: size, fontWeight: 800, color: "white", letterSpacing: "-0.02em" }}>SARAYA</span>
     </div>
   );
@@ -114,9 +114,9 @@ function Slide({ n, children, noPad }: { n: number; children: React.ReactNode; n
 function PhoneMock({ children, scale = 1 }: { children: React.ReactNode; scale?: number }) {
   return (
     <div style={{ width: 220 * scale, flexShrink: 0, position: "relative" }}>
-      <div style={{ width: 220 * scale, height: 440 * scale, borderRadius: 36 * scale, background: "#13101F", border: "8px solid rgba(255,255,255,0.12)", position: "relative", overflow: "hidden", boxShadow: `0 24px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06)` }}>
+      <div style={{ width: 220 * scale, height: 440 * scale, borderRadius: 36 * scale, background: "#0D0D18", border: "8px solid rgba(255,255,255,0.12)", position: "relative", overflow: "hidden", boxShadow: `0 24px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06)` }}>
         {/* notch */}
-        <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: 70 * scale, height: 20 * scale, background: "#13101F", borderRadius: "0 0 14px 14px", zIndex: 10 }} />
+        <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: 70 * scale, height: 20 * scale, background: "#0D0D18", borderRadius: "0 0 14px 14px", zIndex: 10 }} />
         {children}
       </div>
     </div>
@@ -152,7 +152,7 @@ export default function PdfPage() {
   }, []);
 
   return (
-    <div style={{ background: "#030208", minHeight: "100vh", padding: "40px 0 80px", display: "flex", flexDirection: "column", alignItems: "center", fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+    <div style={{ background: "#0A0A0F", minHeight: "100vh", padding: "40px 0 80px", display: "flex", flexDirection: "column", alignItems: "center", fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
 
       {/* Upute */}
       <div style={{ width: W, marginBottom: 28, padding: "14px 20px", background: "rgba(139,92,246,0.08)", border: "1px solid rgba(139,92,246,0.25)", borderRadius: 12, color: TEXT_MID, fontSize: 13, lineHeight: 1.7 }}>
@@ -161,23 +161,23 @@ export default function PdfPage() {
 
       {/* ═══════════════════════ SLAJD 1 — NASLOVNICA ══════════════════════ */}
       <Slide n={1} noPad>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 85% 90% at 50% 28%, rgba(88,28,235,0.32) 0%, transparent 68%), #07040D" }} />
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 85% 90% at 50% 28%, rgba(48,128,255,0.22) 0%, rgba(139,92,246,0.18) 50%, transparent 75%), #0D0D12" }} />
         <GridLines />
         <Blob x={-140} y={-120} size={520} opacity={0.22} />
         <Blob x={860} y={430} size={400} opacity={0.14} />
         <Blob x={680} y={-90} size={300} opacity={0.12} gold />
-        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, transparent, ${PURPLE}, ${GOLD}, transparent)` }} />
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, transparent, ${PURPLE}, ${BLUE}, transparent)` }} />
         <div style={{ position: "absolute", top: 28, right: 40, display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ color: TEXT_DIM, fontSize: 11, letterSpacing: "0.1em", fontWeight: 600 }}>POWERED BY</span>
           <SarayaLogo size={13} />
         </div>
         <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
           <img src="/icons/icon-192.png" alt="icon" style={{ width: 84, height: 84, borderRadius: 22, border: `1px solid ${BORDER}`, marginBottom: 20 }} />
-          <div style={{ background: GOLD_DIM, border: `1px solid ${GOLD_BORDER}`, borderRadius: 99, padding: "4px 18px", color: GOLD, fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", marginBottom: 16 }}>
+          <div style={{ background: BLUE_DIM, border: `1px solid ${BLUE_BORDER}`, borderRadius: 99, padding: "4px 18px", color: BLUE, fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", marginBottom: 16 }}>
             ● DIGITALNI TURISTIČKI PRATILAC SARAJEVA
           </div>
           <div style={{ fontSize: 78, fontWeight: 900, color: "white", letterSpacing: "-3.5px", lineHeight: 0.95, textAlign: "center" }}>SARAYA</div>
-          <div style={{ fontSize: 78, fontWeight: 900, background: `linear-gradient(90deg, ${PURPLE}, #C084FC, ${GOLD})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", letterSpacing: "-3.5px", lineHeight: 0.95, textAlign: "center", marginBottom: 18 }}>EXPLORE</div>
+          <div style={{ fontSize: 78, fontWeight: 900, background: `linear-gradient(90deg, ${PURPLE}, #A78BFA, ${BLUE})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", letterSpacing: "-3.5px", lineHeight: 0.95, textAlign: "center", marginBottom: 18 }}>EXPLORE</div>
           <div style={{ fontSize: 16, color: TEXT_MID, letterSpacing: "0.05em", textAlign: "center", marginBottom: 28, maxWidth: 560, lineHeight: 1.6 }}>
             Upoznaj dušu Sarajeva korak po korak — priča po priča, lokalitet po lokalitet
           </div>
@@ -235,7 +235,7 @@ export default function PdfPage() {
                 body: "Interaktivna mapa prikazuje historijska mjesta u blizini. GPS prati da li je turist zaista tamo.",
               },
               {
-                n: "3", icon: "🏆", color: GOLD,
+                n: "3", icon: "🏆", color: BLUE,
                 title: "Otključava sadržaj i dobija nagradu",
                 body: "Na licu mjesta otvara video, slike, 3D model i historiju. Skuplja digitalnu figurinu lokaliteta. Kompletna kolekcija = Saraya nagrada.",
               },
@@ -257,7 +257,7 @@ export default function PdfPage() {
           <div style={{ flex: "0 0 296px", display: "flex", flexDirection: "column", gap: 12 }}>
             <div style={{ color: TEXT_DIM, fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", marginBottom: 2 }}>ZAŠTO JE OVO VRIJEDNO ZA NAS?</div>
             {[
-              { icon: "🧲", color: GOLD, title: "Zadržavamo turista duže", body: "Turist koji traži lokalitete ostaje u zoni oko našeg kafea — i troši kod nas." },
+              { icon: "🧲", color: BLUE, title: "Zadržavamo turista duže", body: "Turist koji traži lokalitete ostaje u zoni oko našeg kafea — i troši kod nas." },
               { icon: "📊", color: PURPLE, title: "Znamo ko su naši gosti", body: "Vidimo nacionalnosti, aktivne sate, omiljene lokacije — podaci za pametan marketing." },
               { icon: "🌐", color: "#34D399", title: "Saraya brend na turističkoj karti", body: "Postajemo kompanija koja čuva i dijeli sarajevsku historiju — prepoznatljivi, jedinstveni." },
             ].map(({ icon, color, title, body }) => (
@@ -285,8 +285,8 @@ export default function PdfPage() {
             <div style={{ color: TEXT_MID, fontSize: 14, lineHeight: 1.82, marginBottom: 20 }}>
               Svaki otključan lokalitet donosi <strong style={{ color: "white" }}>punu multimedijalnu priču</strong> — video, fotografije, historijski tekst, 3D model za rotaciju i istraživanje, a po završetku — <strong style={{ color: "white" }}>nagradu</strong> koja ostaje kao trajno sjećanje.
             </div>
-            <div style={{ background: GOLD_DIM, border: `1px solid ${GOLD_BORDER}`, borderRadius: 14, padding: "13px 18px" }}>
-              <div style={{ color: GOLD, fontSize: 12, fontWeight: 700, marginBottom: 4 }}>💡 KLJUČNA IDEJA</div>
+            <div style={{ background: BLUE_DIM, border: `1px solid ${BLUE_BORDER}`, borderRadius: 14, padding: "13px 18px" }}>
+              <div style={{ color: BLUE, fontSize: 12, fontWeight: 700, marginBottom: 4 }}>💡 KLJUČNA IDEJA</div>
               <div style={{ color: TEXT_MID, fontSize: 13, lineHeight: 1.6 }}>
                 Turisti ne <em>čitaju</em> o Sarajevu — oni ga <strong style={{ color: "white" }}>proživljavaju</strong>. Svaki korak je otkriće, svaki lokalitet je priča, svaka nagrada je uspomena.
               </div>
@@ -297,7 +297,7 @@ export default function PdfPage() {
               { num: "∞", label: "Lokaliteta — bez ograničenja", sub: "Počinjemo s historijskim lokacijama oko našeg Hotspota, a proširujemo prema viziji", accent: "rgba(139,92,246,0.14)", border: "rgba(139,92,246,0.3)" },
               { num: "9+", label: "Jezika — i više", sub: "Počeli smo s 9 najzastupljenijih u Sarajevu. Novi se dodaju jednom komandom.", accent: "rgba(59,130,246,0.12)", border: "rgba(59,130,246,0.28)" },
               { num: "3D", label: "Modeli kao nagrade", sub: "Digitalne figurine lokaliteta — trajne uspomene u kolekciji", accent: "rgba(16,185,129,0.12)", border: "rgba(16,185,129,0.28)" },
-              { num: "0€", label: "Za turiste — besplatno", sub: "Pristupačno svima, bez barijera — Saraya zarađuje kroz prisustvo i prepoznatljivost", accent: GOLD_DIM, border: GOLD_BORDER },
+              { num: "0€", label: "Za turiste — besplatno", sub: "Pristupačno svima, bez barijera — Saraya zarađuje kroz prisustvo i prepoznatljivost", accent: BLUE_DIM, border: BLUE_BORDER },
             ].map(({ num, label, sub, accent, border }) => (
               <div key={label} style={{ background: accent, border: `1px solid ${border}`, borderRadius: 15, padding: "14px 20px", display: "flex", alignItems: "center", gap: 16 }}>
                 <div style={{ fontSize: 30, fontWeight: 900, color: "white", minWidth: 62, letterSpacing: "-1px" }}>{num}</div>
@@ -324,7 +324,7 @@ export default function PdfPage() {
         </div>
         <div style={{ display: "flex", gap: 12, marginBottom: 22 }}>
           {[
-            { icon: "📶", label: "Turist se spaja na Saraya WiFi", sub: "Captive portal se automatski otvara", color: GOLD_DIM, bc: GOLD_BORDER, tc: GOLD },
+            { icon: "📶", label: "Turist se spaja na Saraya WiFi", sub: "Captive portal se automatski otvara", color: BLUE_DIM, bc: BLUE_BORDER, tc: BLUE },
             { arrow: true },
             { icon: "📱", label: "Saraya Explore se prikazuje", sub: "Nema instalacije — direktno u pretraživaču", color: PURPLE_DIM, bc: PURPLE_BORDER, tc: PURPLE },
             { arrow: true },
@@ -332,7 +332,7 @@ export default function PdfPage() {
             { arrow: true },
             { icon: "🗺️", label: "Mapa s lokalitetima", sub: "Vidi šta je u blizini i kreće u istraživanje", color: "rgba(16,185,129,0.12)", bc: "rgba(16,185,129,0.28)", tc: "#34D399" },
             { arrow: true },
-            { icon: "💛", label: "Vraća se s nagradom", sub: "Popust ili poklon u Saraya kafeu", color: GOLD_DIM, bc: GOLD_BORDER, tc: GOLD },
+            { icon: "🎁", label: "Vraća se s nagradom", sub: "Popust ili poklon u Saraya kafeu", color: BLUE_DIM, bc: BLUE_BORDER, tc: BLUE },
           ].map((item, i) =>
             "arrow" in item ? (
               <div key={i} style={{ color: TEXT_DIM, fontSize: 20, padding: "0 4px", alignSelf: "center", flexShrink: 0 }}>→</div>
@@ -368,10 +368,10 @@ export default function PdfPage() {
           <div style={{ fontSize: 36, fontWeight: 800, color: "white", letterSpacing: "-1px" }}>Od WiFi-ja do historijske <Grad>avanture</Grad> za 5 minuta</div>
         </div>
         <div style={{ display: "flex", alignItems: "flex-start", gap: 0, position: "relative", marginBottom: 28 }}>
-          <div style={{ position: "absolute", top: 44, left: "10%", right: "10%", height: 2, background: `linear-gradient(90deg, transparent, ${PURPLE_BORDER}, ${GOLD_BORDER}, transparent)`, zIndex: 0 }} />
+          <div style={{ position: "absolute", top: 44, left: "10%", right: "10%", height: 2, background: `linear-gradient(90deg, transparent, ${PURPLE_BORDER}, ${BLUE_BORDER}, transparent)`, zIndex: 0 }} />
           {koraci.map((s, i) => (
             <div key={s.n} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 12, position: "relative", zIndex: 1 }}>
-              <div style={{ width: 88, height: 88, borderRadius: "50%", background: i === 4 ? `linear-gradient(135deg, ${PURPLE}, #C084FC)` : SURFACE, border: `2px solid ${i === 4 ? PURPLE : BORDER}`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: i === 4 ? `0 0 36px rgba(139,92,246,0.5)` : "none" }}>
+              <div style={{ width: 88, height: 88, borderRadius: "50%", background: i === 4 ? `linear-gradient(135deg, ${PURPLE}, ${BLUE})` : SURFACE, border: `2px solid ${i === 4 ? PURPLE : BORDER}`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: i === 4 ? `0 0 36px rgba(139,92,246,0.5)` : "none" }}>
                 <div style={{ fontSize: 28 }}>{s.icon}</div>
               </div>
               <div style={{ textAlign: "center" }}>
@@ -382,10 +382,10 @@ export default function PdfPage() {
           ))}
         </div>
         <div style={{ display: "flex", gap: 13 }}>
-          <div style={{ flex: 1, background: GOLD_DIM, border: `1px solid ${GOLD_BORDER}`, borderRadius: 16, padding: "16px 20px", display: "flex", alignItems: "center", gap: 14 }}>
+          <div style={{ flex: 1, background: BLUE_DIM, border: `1px solid ${BLUE_BORDER}`, borderRadius: 16, padding: "16px 20px", display: "flex", alignItems: "center", gap: 14 }}>
             <div style={{ fontSize: 26 }}>🔑</div>
             <div>
-              <div style={{ color: GOLD, fontWeight: 700, fontSize: 13, marginBottom: 3 }}>Prijava jednim klikom — Google nalog</div>
+              <div style={{ color: BLUE, fontWeight: 700, fontSize: 13, marginBottom: 3 }}>Prijava jednim klikom — Google nalog</div>
               <div style={{ color: TEXT_MID, fontSize: 12 }}>Turisti mogu koristiti Gmail koji već imaju. Nema formulara, nema čekanja — odmah su unutra i kreću u eksploraciju.</div>
             </div>
           </div>
@@ -425,9 +425,9 @@ export default function PdfPage() {
             </div>
           ))}
         </div>
-        <div style={{ marginTop: 16, background: GOLD_DIM, border: `1px solid ${GOLD_BORDER}`, borderRadius: 12, padding: "10px 18px", display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ marginTop: 16, background: BLUE_DIM, border: `1px solid ${BLUE_BORDER}`, borderRadius: 12, padding: "10px 18px", display: "flex", alignItems: "center", gap: 10 }}>
           <span style={{ fontSize: 18 }}>➕</span>
-          <span style={{ color: GOLD, fontSize: 12, fontWeight: 600 }}>Novi lokaliteti se dodaju iz admin panela za nekoliko minuta — bez programera, bez tehničkog znanja.</span>
+          <span style={{ color: BLUE, fontSize: 12, fontWeight: 600 }}>Novi lokaliteti se dodaju iz admin panela za nekoliko minuta — bez programera, bez tehničkog znanja.</span>
         </div>
       </Slide>
 
@@ -484,8 +484,8 @@ export default function PdfPage() {
 
           {/* Right side — collection card */}
           <div style={{ width: 200, display: "flex", flexDirection: "column", gap: 11 }}>
-            <div style={{ background: GOLD_DIM, border: `1px solid ${GOLD_BORDER}`, borderRadius: 14, padding: "14px" }}>
-              <div style={{ color: GOLD, fontSize: 11, fontWeight: 700, marginBottom: 6 }}>🏆 DODATO U KOLEKCIJU</div>
+            <div style={{ background: BLUE_DIM, border: `1px solid ${BLUE_BORDER}`, borderRadius: 14, padding: "14px" }}>
+              <div style={{ color: BLUE, fontSize: 11, fontWeight: 700, marginBottom: 6 }}>🏆 DODATO U KOLEKCIJU</div>
               <img src="/models/icons/vijecnica.webp" alt="Vijećnica" style={{ width: "100%", height: 90, objectFit: "cover", borderRadius: 10, marginBottom: 8 }} />
               <div style={{ color: "white", fontSize: 11, fontWeight: 700 }}>Vijećnica</div>
               <div style={{ color: TEXT_DIM, fontSize: 10, marginTop: 2 }}>1. put viđeno: 11. maja 2026.</div>
@@ -515,7 +515,7 @@ export default function PdfPage() {
             {[
               { icon: "🔄", color: "#8B5CF6", title: "360° Rotacija", body: "Turist može rotirati 3D model lokaliteta u svim pravcima prstom ili mišem. Vidi svaki detalj arhitekture." },
               { icon: "🔍", color: "#3B82F6", title: "Zumiranje i istraživanje", body: "Zumi do najsitnijeg detalja — dekorativnih ukrasa Vijećnice, klesanog kamena Seblja, plamena Vječne Vatre." },
-              { icon: "💡", color: GOLD, title: "Opisane točke interesa", body: "Na 3D modelu su označene istaknute tačke — klikni na bilo koji dio i dobij opis. Interaktivna historija." },
+              { icon: "💡", color: BLUE, title: "Opisane točke interesa", body: "Na 3D modelu su označene istaknute tačke — klikni na bilo koji dio i dobij opis. Interaktivna historija." },
               { icon: "📱", color: "#10B981", title: "AR mogućnost (proširenje)", body: "Buduća verzija može koristiti kameru telefona za prikaz 3D modela ispred stvarnog lokaliteta — augmentirana stvarnost." },
             ].map(({ icon, color, title, body }) => (
               <div key={title} style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: 14, padding: "12px 15px", display: "flex", gap: 12, alignItems: "flex-start" }}>
@@ -561,8 +561,8 @@ export default function PdfPage() {
               <div style={{ color: "white", fontSize: 12, fontWeight: 700, marginBottom: 6 }}>📐 Radi na svim uređajima</div>
               <div style={{ color: TEXT_MID, fontSize: 12, lineHeight: 1.6 }}>iOS, Android, Windows, Mac — 3D preglednik radi u svim modernim pretraživačima. Nema ograničenja ni prepreka.</div>
             </div>
-            <div style={{ background: GOLD_DIM, border: `1px solid ${GOLD_BORDER}`, borderRadius: 14, padding: "15px 16px" }}>
-              <div style={{ color: GOLD, fontSize: 12, fontWeight: 700, marginBottom: 6 }}>🎨 Naš tim pravi modele</div>
+            <div style={{ background: BLUE_DIM, border: `1px solid ${BLUE_BORDER}`, borderRadius: 14, padding: "15px 16px" }}>
+              <div style={{ color: BLUE, fontSize: 12, fontWeight: 700, marginBottom: 6 }}>🎨 Naš tim pravi modele</div>
               <div style={{ color: TEXT_MID, fontSize: 12, lineHeight: 1.6 }}>Svaki 3D model je ručno izrađen i optimiziran za naše lokalitete — jedinstven prikaz koji ne postoji nigdje drugdje na internetu.</div>
             </div>
           </div>
@@ -579,11 +579,11 @@ export default function PdfPage() {
         <div style={{ display: "flex", gap: 20 }}>
           <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
             <div style={{ color: TEXT_MID, fontSize: 13, lineHeight: 1.75, marginBottom: 4 }}>
-              Svaki posjećeni lokalitet donosi <strong style={{ color: "white" }}>digitalnu figurinu</strong> — 3D model koji ostaje u kolekciji zauvijek. To nije samo igra — to je <strong style={{ color: GOLD }}>digitalna uspomena</strong> na trenutak kada si prvi put stao ispred tog mjesta i osjetio njegovu historiju.
+              Svaki posjećeni lokalitet donosi <strong style={{ color: "white" }}>digitalnu figurinu</strong> — 3D model koji ostaje u kolekciji zauvijek. To nije samo igra — to je <strong style={{ color: BLUE }}>digitalna uspomena</strong> na trenutak kada si prvi put stao ispred tog mjesta i osjetio njegovu historiju.
             </div>
             {[
               { icon: "🏛️", color: "#8B5CF6", title: "Digitalna figurina lokaliteta", body: "Rotabilni 3D model koji turist može otvoriti i pokazati prijateljima: 'Ovo sam ja prikupio u Sarajevu.' Personalizovana, jedinstven." },
-              { icon: "🕰️", color: GOLD, title: "Datum i trenutak prvog susreta", body: "Svaka figurina u kolekciji nosi datum i sat kada je turist po prvi put stao pred taj lokalitet. 'Sebilj — 11. maja 2026., 14:32.' Uspomena ugravirano u digitalnom modelu." },
+              { icon: "🕰️", color: BLUE, title: "Datum i trenutak prvog susreta", body: "Svaka figurina u kolekciji nosi datum i sat kada je turist po prvi put stao pred taj lokalitet. 'Sebilj — 11. maja 2026., 14:32.' Uspomena ugravirano u digitalnom modelu." },
               { icon: "👕", color: "#F472B6", title: "Fizičke nagrade — majica, razglednica, keychain", body: "Ko sakupi kompletnu kolekciju, može odabrati fizičku nagradu: Saraya majica, razglednica s potpisom, mini figurica lokaliteta ili nešto sasvim posebno što sami odredimo." },
               { icon: "☕", color: "#10B981", title: "Nagrada u Saraya kafeu", body: "Besplatan napitak ili popust za turiste koji završe kolekciju. Oni se fizički vraćaju k nama — i troše novac. Krug se zatvara." },
             ].map(({ icon, color, title, body }) => (
@@ -613,12 +613,12 @@ export default function PdfPage() {
                 ))}
               </div>
               <div style={{ marginTop: 12, height: 5, borderRadius: 99, background: "rgba(255,255,255,0.06)", overflow: "hidden" }}>
-                <div style={{ width: "66%", height: "100%", background: `linear-gradient(90deg, ${PURPLE}, #C084FC)`, borderRadius: 99 }} />
+                <div style={{ width: "66%", height: "100%", background: `linear-gradient(90deg, ${PURPLE}, ${BLUE})`, borderRadius: 99 }} />
               </div>
               <div style={{ color: TEXT_DIM, fontSize: 10, marginTop: 5 }}>66% kolekcije · još 2 do nagrade</div>
             </div>
-            <div style={{ background: GOLD_DIM, border: `1px solid ${GOLD_BORDER}`, borderRadius: 14, padding: "14px 16px" }}>
-              <div style={{ color: GOLD, fontWeight: 700, fontSize: 12, marginBottom: 6 }}>🏆 KOMPLETNA KOLEKCIJA = SARAYA NAGRADA</div>
+            <div style={{ background: BLUE_DIM, border: `1px solid ${BLUE_BORDER}`, borderRadius: 14, padding: "14px 16px" }}>
+              <div style={{ color: BLUE, fontWeight: 700, fontSize: 12, marginBottom: 6 }}>🏆 KOMPLETNA KOLEKCIJA = SARAYA NAGRADA</div>
               <div style={{ color: TEXT_MID, fontSize: 11, lineHeight: 1.6 }}>Majica, razglednica, fizička figurica ili besplatan napitak — turist bira nagradu koja mu znači. Saraya postaje zauvijek dio te uspomene.</div>
             </div>
           </div>
@@ -636,8 +636,8 @@ export default function PdfPage() {
             <div style={{ color: TEXT_MID, fontSize: 14, lineHeight: 1.8, marginBottom: 16 }}>
               Sarajevo godišnje posjećuje <strong style={{ color: "white" }}>više od milion turista</strong> — iz Europe, Bliskog istoka, Azije i cijeloga svijeta. Saraya Explore automatski prepoznaje jezik uređaja i prikazuje sav sadržaj bez ikakvog podešavanja.
             </div>
-            <div style={{ background: GOLD_DIM, border: `1px solid ${GOLD_BORDER}`, borderRadius: 14, padding: "13px 16px", marginBottom: 16 }}>
-              <div style={{ color: GOLD, fontSize: 12, fontWeight: 700, marginBottom: 4 }}>✨ PREDNOST: Neograničen broj jezika</div>
+            <div style={{ background: BLUE_DIM, border: `1px solid ${BLUE_BORDER}`, borderRadius: 14, padding: "13px 16px", marginBottom: 16 }}>
+              <div style={{ color: BLUE, fontSize: 12, fontWeight: 700, marginBottom: 4 }}>✨ PREDNOST: Neograničen broj jezika</div>
               <div style={{ color: TEXT_MID, fontSize: 12, lineHeight: 1.6 }}>Trenutno podržavamo 9 najzastupljenijih jezika turista u Sarajevu — ali arhitektura aplikacije omogućava dodavanje bilo kojeg novog jezika za samo nekoliko minuta, bez programera.</div>
             </div>
             {[
@@ -679,7 +679,7 @@ export default function PdfPage() {
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 13 }}>
           {[
-            { icon: "📡", color: GOLD, title: "Naš Hotspot — ulazna tačka", body: "Svaki turist koji se spoji na naš WiFi vidi Saraya Explore. Captive portal ih dovodi direktno k nama — naš brend je prva digitalna stvar s kojom se susreću u Sarajevu." },
+            { icon: "📡", color: BLUE, title: "Naš Hotspot — ulazna tačka", body: "Svaki turist koji se spoji na naš WiFi vidi Saraya Explore. Captive portal ih dovodi direktno k nama — naš brend je prva digitalna stvar s kojom se susreću u Sarajevu." },
             { icon: "🔁", color: PURPLE, title: "Turist se fizički vraća", body: "Nagrada za kompletnu kolekciju — napitak, popust, majica — tjera turiste da se vrate u Saraya kafo. Nisu više anonimni prolaznici, već naši gosti." },
             { icon: "📊", color: "#60A5FA", title: "Podaci koji vrijede", body: "Vidimo iz kojih zemalja dolaze naši gosti, koji lokaliteti ih najviše privlače, kada su aktivni. Koristimo te podatke za marketing i unapređenje ponude." },
             { icon: "🌐", color: "#34D399", title: "Višejezična usluga bez napora", body: "Turisti dobijaju uslugu na svom maternjem jeziku. Arapin, Nijemac i Bosanac — svako na svom. Mi to ne moramo ručno raditi — aplikacija to radi automatski." },
@@ -709,7 +709,7 @@ export default function PdfPage() {
         <div style={{ display: "flex", gap: 15 }}>
           {[
             { icon: "🗺️", color: "#8B5CF6", title: "Nova mjesta — bez Hotspota", body: "Aplikacija radi potpuno neovisno od WiFi mreže. Dodamo nove lokalitete u bilo kojoj gradskoj četvrti — Bjelave, Kovači, Ilidža, Trebević — i turisti ih otkrivaju sami.", tag: "Proširenje" },
-            { icon: "🏙️", color: GOLD, title: "Visit Sarajevo — partnerstvo", body: "Saraya Explore je savršen alat za Visit Sarajevo, s kojima već surađujemo. Projektujemo i isporučujemo im platformu pod njihovim brendom — ili im nudimo white-label verziju.", tag: "Klijent" },
+            { icon: "🏙️", color: BLUE, title: "Visit Sarajevo — partnerstvo", body: "Saraya Explore je savršen alat za Visit Sarajevo, s kojima već surađujemo. Projektujemo i isporučujemo im platformu pod njihovim brendom — ili im nudimo white-label verziju.", tag: "Klijent" },
             { icon: "🏨", color: "#60A5FA", title: "Hoteli i turoperateri", body: "Sarajevski hoteli, turističke agencije i ture mogu koristiti Saraya Explore kao digitalni compan za svoje goste. Svaki hotel ima vlastiti onboarding.", tag: "B2B" },
             { icon: "🎭", color: "#34D399", title: "Festivali i eventi", body: "Sarajevo Film Festival, Jazz Fest, Baščaršijske noći — svaki event može imati vlastitu Saraya Explore tematsku eksploraciju gradskih kutaka.", tag: "Sezonski" },
           ].map(({ icon, color, title, body, tag }) => (
@@ -723,10 +723,10 @@ export default function PdfPage() {
             </div>
           ))}
         </div>
-        <div style={{ marginTop: 14, background: GOLD_DIM, border: `1px solid ${GOLD_BORDER}`, borderRadius: 14, padding: "12px 18px", display: "flex", alignItems: "center", gap: 12 }}>
+        <div style={{ marginTop: 14, background: BLUE_DIM, border: `1px solid ${BLUE_BORDER}`, borderRadius: 14, padding: "12px 18px", display: "flex", alignItems: "center", gap: 12 }}>
           <span style={{ fontSize: 20 }}>💡</span>
           <span style={{ color: TEXT_MID, fontSize: 13 }}>
-            <strong style={{ color: GOLD }}>Mi smo graditelji platforme.</strong> Saraya Explore je naš intelektualni proizvod — dizajniramo, isporučujemo i održavamo ga za sebe ili za klijenta. Svaki grad koji želi nešto ovako, mora doći do nas.
+            <strong style={{ color: BLUE }}>Mi smo graditelji platforme.</strong> Saraya Explore je naš intelektualni proizvod — dizajniramo, isporučujemo i održavamo ga za sebe ili za klijenta. Svaki grad koji želi nešto ovako, mora doći do nas.
           </span>
         </div>
       </Slide>
@@ -747,7 +747,7 @@ export default function PdfPage() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginBottom: 16 }}>
           {[
             { icon: "🛰️", title: "GPS verifikacija", body: "Mora se fizički biti na lokaciji — nema varanja, nema skipanja. Autentično iskustvo.", color: PURPLE },
-            { icon: "🎮", title: "Gamifikacija historije", body: "Sakupljanje, progres, nagrade — turizam pretvoren u igru za odrasle.", color: GOLD },
+            { icon: "🎮", title: "Gamifikacija historije", body: "Sakupljanje, progres, nagrade — turizam pretvoren u igru za odrasle.", color: BLUE },
             { icon: "🌐", title: "Captive Portal ulaz", body: "Jedini grad gdje WiFi prijava znači ulaz u interaktivnu historijsku avanturu.", color: "#60A5FA" },
             { icon: "🏺", title: "3D digitalna baština", body: "Historijska mjesta žive kao 3D modeli u džepu — dostupno svima, zauvijek.", color: "#34D399" },
           ].map(({ icon, title, body, color }) => (
@@ -763,8 +763,8 @@ export default function PdfPage() {
             <div style={{ color: PURPLE, fontSize: 12, fontWeight: 700, marginBottom: 5 }}>🌍 Šta ima u ostalim gradovima?</div>
             <div style={{ color: TEXT_MID, fontSize: 12, lineHeight: 1.65 }}>Postoje audio-ture (aplikacije kao Rick Steves), AR ture (ARCity), GPS igre (Pokémon Go logika). Ali nitko nije spojio sve to s Hotspot integracijom, 3D kolekcijom kao digitalnom baštinom i fizičkim nagradama — u jednoj, besplatnoj, višejezičnoj web-aplikaciji.</div>
           </div>
-          <div style={{ flex: 1, background: GOLD_DIM, border: `1px solid ${GOLD_BORDER}`, borderRadius: 14, padding: "16px 18px" }}>
-            <div style={{ color: GOLD, fontSize: 12, fontWeight: 700, marginBottom: 5 }}>🏅 Sarajevo može biti pionir</div>
+          <div style={{ flex: 1, background: BLUE_DIM, border: `1px solid ${BLUE_BORDER}`, borderRadius: 14, padding: "16px 18px" }}>
+            <div style={{ color: BLUE, fontSize: 12, fontWeight: 700, marginBottom: 5 }}>🏅 Sarajevo može biti pionir</div>
             <div style={{ color: TEXT_MID, fontSize: 12, lineHeight: 1.65 }}>Saraya Explore postavlja standard za digitalni urbani turizam. Kad drugi gradovi krenu kopirati, mi ćemo već biti godinama ispred — s iskustvom, brendom i infrastrukturom. Sarajevo vodi, ostali prate.</div>
           </div>
         </div>
@@ -782,7 +782,7 @@ export default function PdfPage() {
           {[
             { phase: "Faza 1", time: "Sedmica 1–2", title: "Postavljanje i branding", items: ["Finalni Saraya branding i dizajn", "Captive portal konfiguracija na Hotspotu", "Test s prvim turistima i feedback", "Gmail/Google prijava aktivacija"], color: PURPLE },
             { phase: "Faza 2", time: "Sedmica 3–4", title: "Sadržaj i prijevodi", items: ["Unos svih historijskih priča", "Prijevodi na svih 9+ jezika", "Upload galerija, videa i 3D modela", "Obuka Saraya tima za admin panel"], color: "#60A5FA" },
-            { phase: "Faza 3", time: "Sedmica 5–6", title: "Lansiranje i promocija", items: ["Javno lansiranje aplikacije", "Promocija na socijalnim mrežama", "Aktivacija nagrade za kompletnu kolekciju", "Analitika — praćenje prvih rezultata"], color: GOLD },
+            { phase: "Faza 3", time: "Sedmica 5–6", title: "Lansiranje i promocija", items: ["Javno lansiranje aplikacije", "Promocija na socijalnim mrežama", "Aktivacija nagrade za kompletnu kolekciju", "Analitika — praćenje prvih rezultata"], color: BLUE },
           ].map(ph => (
             <div key={ph.phase} style={{ flex: 1, background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: 17, padding: "18px 17px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 11 }}>
@@ -801,7 +801,7 @@ export default function PdfPage() {
         <div style={{ display: "flex", gap: 13 }}>
           {[
             { icon: "🚀", text: "Aplikacija je već razvijena i funkcionalna — implementacija je brza i bez tehničkih prepreka", color: PURPLE },
-            { icon: "👥", text: "Naš tim rukuje svim sadržajem — ne trebamo vanjske programere za svakodnevne izmjene", color: GOLD },
+            { icon: "👥", text: "Naš tim rukuje svim sadržajem — ne trebamo vanjske programere za svakodnevne izmjene", color: BLUE },
             { icon: "📈", text: "Vidljivi rezultati od prvog mieseca — povećan promet, prepoznatljivost i povratak turista", color: "#34D399" },
           ].map(({ icon, text, color }) => (
             <div key={text} style={{ flex: 1, background: `${color}0F`, border: `1px solid ${color}30`, borderRadius: 13, padding: "13px 15px", display: "flex", alignItems: "center", gap: 10 }}>
@@ -814,21 +814,21 @@ export default function PdfPage() {
 
       {/* ══════════════ SLAJD 15 — ZAKLJUČAK / CTA ═══════════════════════════ */}
       <Slide n={15} noPad>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 90% 70% at 50% 60%, rgba(88,28,235,0.24) 0%, transparent 65%), #07040D" }} />
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 90% 70% at 50% 60%, rgba(48,128,255,0.18) 0%, rgba(139,92,246,0.14) 50%, transparent 70%), #0D0D12" }} />
         <GridLines />
         <Blob x={-80} y={400} size={420} opacity={0.18} />
         <Blob x={880} y={-60} size={460} opacity={0.14} gold />
-        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, transparent, ${PURPLE}, ${GOLD}, transparent)` }} />
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, transparent, ${PURPLE}, ${BLUE}, transparent)` }} />
         <div style={{ position: "absolute", top: 28, right: 40, display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ color: TEXT_DIM, fontSize: 11, letterSpacing: "0.1em", fontWeight: 600 }}>POWERED BY</span>
           <SarayaLogo size={13} />
         </div>
         <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ background: GOLD_DIM, border: `1px solid ${GOLD_BORDER}`, borderRadius: 99, padding: "5px 18px", color: GOLD, fontSize: 11, fontWeight: 700, letterSpacing: "0.13em", marginBottom: 22 }}>
+          <div style={{ background: BLUE_DIM, border: `1px solid ${BLUE_BORDER}`, borderRadius: 99, padding: "5px 18px", color: BLUE, fontSize: 11, fontWeight: 700, letterSpacing: "0.13em", marginBottom: 22 }}>
             ● SARAYA EXPLORE — DIGITALNA BUDUĆNOST SARAJEVA
           </div>
           <div style={{ fontSize: 52, fontWeight: 900, color: "white", letterSpacing: "-1.5px", lineHeight: 1.1, textAlign: "center", marginBottom: 6 }}>Sarajevo zaslužuje</div>
-          <div style={{ fontSize: 52, fontWeight: 900, background: `linear-gradient(90deg, ${PURPLE}, #C084FC, ${GOLD})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", letterSpacing: "-1.5px", lineHeight: 1.1, textAlign: "center", marginBottom: 20 }}>ovaj doživljaj.</div>
+          <div style={{ fontSize: 52, fontWeight: 900, background: `linear-gradient(90deg, ${PURPLE}, #A78BFA, ${BLUE})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", letterSpacing: "-1.5px", lineHeight: 1.1, textAlign: "center", marginBottom: 20 }}>ovaj doživljaj.</div>
           <div style={{ color: TEXT_MID, fontSize: 15, textAlign: "center", marginBottom: 8, maxWidth: 600, lineHeight: 1.75 }}>
             Saraya Explore je <strong style={{ color: "white" }}>most između turista i duše Sarajeva</strong> — izgrađen na našem Hotspotu, s našim brendom, za naš grad.
           </div>
@@ -836,10 +836,10 @@ export default function PdfPage() {
             Svaki turist koji se spoji na naš WiFi postaje ambasador Sarajeva, naš gost — i nosi uspomenu zauvijek.
           </div>
           <div style={{ display: "flex", gap: 13, marginBottom: 32 }}>
-            <div style={{ background: `linear-gradient(135deg, ${PURPLE}, #C084FC)`, borderRadius: 14, padding: "13px 28px", color: "white", fontSize: 14, fontWeight: 700 }}>
+            <div style={{ background: `linear-gradient(135deg, ${PURPLE}, ${BLUE})`, borderRadius: 14, padding: "13px 28px", color: "white", fontSize: 14, fontWeight: 700 }}>
               🚀 Krećemo zajedno
             </div>
-            <div style={{ background: GOLD_DIM, border: `1px solid ${GOLD_BORDER}`, borderRadius: 14, padding: "13px 28px", color: GOLD, fontSize: 14, fontWeight: 700 }}>
+            <div style={{ background: BLUE_DIM, border: `1px solid ${BLUE_BORDER}`, borderRadius: 14, padding: "13px 28px", color: BLUE, fontSize: 14, fontWeight: 700 }}>
               💛 github.com/AfanKulaglic/sarajevo-visit
             </div>
           </div>
