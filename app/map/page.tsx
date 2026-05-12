@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Navbar from "@/components/Navbar";
 import LocationCard from "@/components/LocationCard";
@@ -87,6 +87,21 @@ export default function MapPage() {
   useEffect(() => {
     return subscribeLocations((locs) => setActiveLocations(locs));
   }, []);
+
+  // Handle pending navigation intent set by the collection page
+  const pendingNavHandled = useRef(false);
+  useEffect(() => {
+    if (pendingNavHandled.current || activeLocations.length === 0) return;
+    const raw = localStorage.getItem("saraya_pending_nav");
+    if (!raw) return;
+    localStorage.removeItem("saraya_pending_nav");
+    pendingNavHandled.current = true;
+    try {
+      const { id, mode } = JSON.parse(raw) as { id: string; mode: "foot" | "car" };
+      const loc = activeLocations.find((l) => l.id === id);
+      if (loc) handleNavigateInApp(loc, mode);
+    } catch {}
+  }, [activeLocations]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Immediately trigger the native GPS permission prompt on mount
   useEffect(() => {
