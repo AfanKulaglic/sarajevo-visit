@@ -91,6 +91,71 @@ interface MapViewProps {
   navMode?: "foot" | "car";
   onNavModeChange?: (mode: "foot" | "car") => void;
   onClearNav?: () => void;
+  mapTheme?: "dark" | "light";
+}
+
+function getStyleUrl(theme: "dark" | "light") {
+  return theme === "dark"
+    ? "https://tiles.openfreemap.org/styles/dark"
+    : "https://tiles.openfreemap.org/styles/liberty";
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function setupMapLayers(map: any, theme: "dark" | "light") {
+  if (!map.getSource("route")) {
+    map.addSource("route", {
+      type: "geojson",
+      data: { type: "FeatureCollection", features: [] },
+    });
+  }
+  if (!map.getLayer("route-line")) {
+    map.addLayer({
+      id: "route-line",
+      type: "line",
+      source: "route",
+      layout: { "line-cap": "round", "line-join": "round" },
+      paint: {
+        "line-color": "#a855f7",
+        "line-width": 5,
+        "line-dasharray": [2, 2],
+        "line-opacity": 0.9,
+      },
+    });
+  }
+  // 3D buildings via fill-extrusion (visible at zoom >= 15)
+  if (!map.getLayer("3d-buildings")) {
+    try {
+      const layers = map.getStyle()?.layers ?? [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const firstSymbol = layers.find((l: any) => l.type === "symbol");
+      map.addLayer(
+        {
+          id: "3d-buildings",
+          source: "openmaptiles",
+          "source-layer": "building",
+          type: "fill-extrusion",
+          minzoom: 15,
+          paint: {
+            "fill-extrusion-color": [
+              "interpolate",
+              ["linear"],
+              ["coalesce", ["get", "render_height"], 4],
+              0,
+              theme === "dark" ? "#1e1a30" : "#d4d0c8",
+              60,
+              theme === "dark" ? "#2d2848" : "#b8b4ac",
+            ],
+            "fill-extrusion-height": ["coalesce", ["get", "render_height"], 6],
+            "fill-extrusion-base": ["coalesce", ["get", "render_min_height"], 0],
+            "fill-extrusion-opacity": 0.82,
+          },
+        },
+        firstSymbol?.id
+      );
+    } catch {
+      // buildings layer not critical
+    }
+  }
 }
 
 export default function MapView({
@@ -102,6 +167,7 @@ export default function MapView({
   navMode = "foot",
   onNavModeChange,
   onClearNav,
+  mapTheme = "dark",
 }: MapViewProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -114,6 +180,9 @@ export default function MapView({
   const [viewMode, setViewMode] = useState<"overview" | "3d">("overview");
   const [routeDistanceM, setRouteDistanceM] = useState<number | null>(null);
   const prevPositionRef = useRef<GpsPosition | null>(null);
+  const mapThemeRef = useRef(mapTheme);
+  mapThemeRef.current = mapTheme;
+  const prevThemeRef = useRef(mapTheme);
 
   const bearing = useMemo(() => {
     if (!userPosition || !navTarget) return 0;
@@ -155,46 +224,18 @@ export default function MapView({
 
       const map = new maplibregl.Map({
         container: mapContainerRef.current,
-        style: {
-          version: 8,
-          sources: {
-            osm: {
-              type: "raster",
-              tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
-              tileSize: 256,
-              attribution: "\u00a9 OpenStreetMap contributors",
-              maxzoom: 19,
-            },
-          },
-          layers: [{ id: "osm", type: "raster", source: "osm" }],
-        },
+        style: getStyleUrl(mapThemeRef.current),
         center: [18.4131, 43.8563],
         zoom: 13,
         bearing: 0,
-        pitchWithRotate: false,
-        dragRotate: false,
+        pitch: 0,
+        pitchWithRotate: true,
+        dragRotate: true,
       });
 
       map.on("load", () => {
         if (cancelled) return;
-
-        map.addSource("route", {
-          type: "geojson",
-          data: { type: "FeatureCollection", features: [] },
-        });
-        map.addLayer({
-          id: "route-line",
-          type: "line",
-          source: "route",
-          layout: { "line-cap": "round", "line-join": "round" },
-          paint: {
-            "line-color": "#a855f7",
-            "line-width": 5,
-            "line-dasharray": [2, 2],
-            "line-opacity": 0.9,
-          },
-        });
-
+        setupMapLayers(map, mapThemeRef.current);
         mapRef.current = map;
         setMapReady(true);
       });
@@ -214,6 +255,21 @@ export default function MapView({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Map theme change - swap style URL and re-add layers
+  useEffect(() => {
+    if (!mapRef.current) return;
+    if (prevThemeRef.current === mapTheme) return;
+    prevThemeRef.current = mapTheme;
+    setMapReady(false);
+    mapRef.current.setStyle(getStyleUrl(mapTheme));
+    mapRef.current.once("style.load", () => {
+      if (!mapRef.current) return;
+      setupMapLayers(mapRef.current, mapTheme);
+      setMapReady(true);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mapTheme]);
 
   // Location markers
   useEffect(() => {
@@ -342,10 +398,11 @@ export default function MapView({
         center: [userPosition.lng, userPosition.lat],
         zoom: 18,
         bearing: bearing,
+        pitch: 50,
         duration: 900,
       });
     } else if (viewMode === "overview") {
-      mapRef.current.flyTo({ bearing: 0, duration: 700 });
+      mapRef.current.flyTo({ bearing: 0, pitch: 0, duration: 700 });
       if (navTarget && userPosition) {
         const minLng = Math.min(userPosition.lng, navTarget.lng);
         const maxLng = Math.max(userPosition.lng, navTarget.lng);

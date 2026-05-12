@@ -43,6 +43,12 @@ export default function MapPage() {
   const [discoveredLoc, setDiscoveredLoc] = useState<Location | null>(null);
   const [navTarget, setNavTarget] = useState<Location | null>(null);
   const [navMode, setNavMode] = useState<"foot" | "car">("foot");
+  const [mapTheme, setMapTheme] = useState<"dark" | "light">(() => {
+    if (typeof window !== "undefined") {
+      return (localStorage.getItem("saraya_map_theme") as "dark" | "light") || "dark";
+    }
+    return "dark";
+  });
   const [locationPermission, setLocationPermission] = useState<"unknown" | "granted" | "denied">("unknown");
   const [deviceType, setDeviceType] = useState<"ios" | "android" | "unknown">("unknown");
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -65,6 +71,16 @@ export default function MapPage() {
     if (/iphone|ipad|ipod/i.test(ua)) setDeviceType("ios");
     else if (/android/i.test(ua)) setDeviceType("android");
     else setDeviceType("unknown");
+  }, []);
+
+  // Listen for map theme changes dispatched by Navbar settings
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const theme = (e as CustomEvent<"dark" | "light">).detail;
+      setMapTheme(theme);
+    };
+    window.addEventListener("mapthemechange", handler);
+    return () => window.removeEventListener("mapthemechange", handler);
   }, []);
 
   // Load locations from Firebase RTDB in real-time
@@ -253,6 +269,7 @@ export default function MapPage() {
               navMode={navMode}
               onNavModeChange={(m) => setNavMode(m)}
               onClearNav={() => setNavTarget(null)}
+              mapTheme={mapTheme}
             />
           </div>
         )}

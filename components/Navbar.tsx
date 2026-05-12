@@ -55,6 +55,19 @@ export default function Navbar() {
   const [showLangPicker, setShowLangPicker] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
+  const [mapTheme, setMapThemeState] = useState<"dark" | "light">(() => {
+    if (typeof window !== "undefined") {
+      return (localStorage.getItem("saraya_map_theme") as "dark" | "light") || "dark";
+    }
+    return "dark";
+  });
+
+  function toggleMapTheme() {
+    const next = mapTheme === "dark" ? "light" : "dark";
+    setMapThemeState(next);
+    localStorage.setItem("saraya_map_theme", next);
+    window.dispatchEvent(new CustomEvent("mapthemechange", { detail: next }));
+  }
 
   if (!user) return null;
 
@@ -138,6 +151,43 @@ export default function Navbar() {
                         className="rounded-sm mr-1" style={{ objectFit: "cover" }}
                       />
                       <ChevronRight />
+                    </button>
+                    {/* Map theme row */}
+                    <button
+                      onClick={toggleMapTheme}
+                      className="w-full flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-white/[0.03] active:bg-white/[0.06]"
+                    >
+                      <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: mapTheme === "dark" ? "rgba(99,102,241,0.15)" : "rgba(245,158,11,0.15)" }}>
+                        {mapTheme === "dark" ? (
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(165,180,252,0.9)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                          </svg>
+                        ) : (
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(251,191,36,0.9)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="5"/>
+                            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                          </svg>
+                        )}
+                      </div>
+                      <div className="flex-1 text-left">
+                        <p className="text-white text-sm font-medium">Map Style</p>
+                        <p className="text-white/35 text-xs mt-0.5">{mapTheme === "dark" ? "Dark" : "Light"}</p>
+                      </div>
+                      {/* Toggle pill */}
+                      <div
+                        className="w-11 h-6 rounded-full flex items-center transition-all duration-300 flex-shrink-0"
+                        style={{
+                          background: mapTheme === "dark" ? "rgba(99,102,241,0.5)" : "rgba(245,158,11,0.5)",
+                          border: mapTheme === "dark" ? "1px solid rgba(165,180,252,0.3)" : "1px solid rgba(251,191,36,0.3)",
+                          padding: "2px",
+                          justifyContent: mapTheme === "dark" ? "flex-start" : "flex-end",
+                        }}
+                      >
+                        <div className="w-4 h-4 rounded-full bg-white" style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.3)" }} />
+                      </div>
                     </button>
                   </div>
                 </div>
