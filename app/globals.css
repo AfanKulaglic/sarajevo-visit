@@ -58,8 +58,8 @@ body {
 .spinner {
   width: 18px;
   height: 18px;
-  border: 2px solid rgba(255,255,255,0.1);
-  border-top-color: #f59e0b;
+  border: 2px solid rgba(168,85,247,0.15);
+  border-top-color: #a855f7;
   border-radius: 50%;
   animation: spin 0.65s linear infinite;
   display: inline-block;

@@ -103,7 +103,7 @@ export default function CollectionPage() {
                   className="h-full rounded-full transition-all duration-700 ease-out"
                   style={{
                     width: `${pct}%`,
-                    background: "linear-gradient(90deg, #d97706, #f59e0b)",
+                    background: "linear-gradient(90deg, #7c3aed, #a855f7)",
                   }}
                 />
               </div>
@@ -122,20 +122,23 @@ export default function CollectionPage() {
         {allDone && (
           <div className="mx-4 mt-4 anim-fade-in">
             <div
-              className="rounded-2xl border border-purple-700/[0.22] px-4 py-3.5 flex items-center gap-3.5"
+              className="rounded-2xl border border-purple-500/[0.30] px-4 py-3.5 flex items-center gap-3.5"
               style={{
                 background:
-                  "linear-gradient(115deg, rgba(69,26,3,0.85) 0%, rgba(109,40,10,0.65) 100%)",
+                  "linear-gradient(115deg, rgba(59,7,100,0.7) 0%, rgba(88,28,135,0.45) 100%)",
               }}
             >
-              <div className="w-10 h-10 rounded-[12px] bg-purple-500/[0.10] border border-purple-600/20 flex items-center justify-center text-xl flex-shrink-0">
-                🏆
+              <div className="w-10 h-10 rounded-[12px] bg-purple-500/[0.18] border border-purple-500/30 flex items-center justify-center flex-shrink-0">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c084fc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="8" r="6"/>
+                  <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
+                </svg>
               </div>
               <div>
                 <p className="text-purple-200 font-semibold text-[13px] tracking-tight">
                   {t("lbl_complete_collection")}
                 </p>
-                <p className="text-purple-600/60 text-[11px] mt-0.5">
+                <p className="text-purple-300/55 text-[11px] mt-0.5">
                   {t("lbl_complete_collection_sub")}
                 </p>
               </div>

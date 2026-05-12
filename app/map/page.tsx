@@ -17,9 +17,9 @@ import { useGame } from "@/context/GameContext";
 const MapView = dynamic(() => import("@/components/MapView"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full bg-[#0E0B1A] flex flex-col items-center justify-center gap-3">
-      <span className="text-3xl">🗺️</span>
-      <p className="text-white/30 text-xs animate-pulse">Loading map…</p>
+    <div className="w-full h-full bg-[#0E0B1A] flex flex-col items-center justify-center gap-4">
+      <img src="/icons/logo.png" alt="" className="w-12 h-12 object-contain opacity-60" />
+      <div className="w-6 h-6 rounded-full border-2 border-purple-500/20 border-t-purple-500 animate-spin" />
     </div>
   ),
 });

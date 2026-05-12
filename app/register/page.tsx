@@ -41,7 +41,7 @@ export default function RegisterPage() {
     <main className="min-h-screen bg-[#07040D] flex items-center justify-center p-5 relative overflow-hidden">
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[260px] pointer-events-none"
-        style={{ background: "radial-gradient(ellipse, rgba(245,158,11,0.07) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(ellipse, rgba(168,85,247,0.09) 0%, transparent 70%)" }}
       />
 
       <div className="w-full max-w-sm relative anim-fade-up">

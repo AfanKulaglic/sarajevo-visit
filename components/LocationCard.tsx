@@ -247,7 +247,7 @@ export default function LocationCard({
               }`}
             >
               {checking ? (
-                <><span className="spinner" style={{ borderTopColor: "rgba(255,255,255,0.4)", width: 14, height: 14 }} /> {t("btn_checking")}</>
+                <><span className="spinner" style={{ width: 14, height: 14 }} /> {t("btn_checking")}</>
               ) : (
                 t("btn_checkin")
               )}
