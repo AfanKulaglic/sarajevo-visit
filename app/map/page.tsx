@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import { useState, useCallback, useEffect, useRef } from "react";
-import { useSearchParams } from "next/navigation";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Navbar from "@/components/Navbar";
 import LocationCard, { NavMenu } from "@/components/LocationCard";
@@ -12,6 +11,7 @@ import LanguagePickerOverlay from "@/components/LanguagePickerOverlay";
 import { LANG_CHOSEN_KEY, useLanguage } from "@/context/LanguageContext";
 import { locations as defaultLocations, Location } from "@/lib/locations";
 import { subscribeLocations } from "@/lib/locationStorage";
+import { consumePendingNav } from "@/lib/pendingNav";
 import { getCurrentPosition, getDistanceMeters, isUserNearLocation, GpsPosition } from "@/lib/gps";
 import { useGame } from "@/context/GameContext";
 
@@ -35,9 +35,6 @@ interface Toast {
 export default function MapPage() {
   const { collectedItems, collect, hasCollected } = useGame();
   const { t } = useLanguage();
-  const searchParams = useSearchParams();
-  const pendingNavId = searchParams.get("nav");
-  const pendingNavMode = (searchParams.get("mode") ?? "foot") as "foot" | "car";
   const [activeLocations, setActiveLocations] = useState<Location[]>(defaultLocations);
   const [userPosition, setUserPosition] = useState<GpsPosition | null>(null);
   const [distances, setDistances] = useState<Record<string, number>>({});
@@ -94,18 +91,16 @@ export default function MapPage() {
     return subscribeLocations((locs) => setActiveLocations(locs));
   }, []);
 
-  // Handle pending navigation intent from the collection page (via ?nav=ID&mode=MODE).
-  // Track by ID (not boolean) so the effect re-fires if the user navigates to a different
-  // location from the collection page while the map component is still in the router cache.
-  const lastHandledNavId = useRef<string | null>(null);
+  // Handle pending navigation intent set by the Collection page via setPendingNav().
+  // Consumed once GPS is available so we can start routing immediately.
+  const pendingNavConsumed = useRef(false);
   useEffect(() => {
-    if (!pendingNavId) return;
-    if (pendingNavId === lastHandledNavId.current) return; // already handled this specific nav
-    if (!userPosition || activeLocations.length === 0) return;
-    lastHandledNavId.current = pendingNavId;
-    const loc = activeLocations.find((l) => l.id === pendingNavId);
-    if (loc) handleNavigateInApp(loc, pendingNavMode);
-  }, [pendingNavId, pendingNavMode, userPosition, activeLocations]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (pendingNavConsumed.current || !userPosition) return;
+    const pending = consumePendingNav();
+    if (!pending) return;
+    pendingNavConsumed.current = true;
+    handleNavigateInApp(pending.loc, pending.mode);
+  }, [userPosition]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Immediately trigger the native GPS permission prompt on mount
   useEffect(() => {

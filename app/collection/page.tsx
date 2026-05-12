@@ -8,6 +8,7 @@ import LandmarkDetail from "@/components/LandmarkDetail";
 import { NavMenu } from "@/components/LocationCard";
 import { locations as defaultLocations, Location } from "@/lib/locations";
 import { subscribeLocations } from "@/lib/locationStorage";
+import { setPendingNav } from "@/lib/pendingNav";
 import { useGame } from "@/context/GameContext";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -23,7 +24,8 @@ export default function CollectionPage() {
   const [navMenuLoc, setNavMenuLoc] = useState<Location | null>(null);
 
   function startNavigation(loc: Location, mode: "foot" | "car") {
-    router.push(`/map?nav=${encodeURIComponent(loc.id)}&mode=${mode}`);
+    setPendingNav(loc, mode);
+    router.push("/map");
   }
 
   useEffect(() => {
