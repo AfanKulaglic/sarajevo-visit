@@ -92,6 +92,7 @@ interface MapViewProps {
   onNavModeChange?: (mode: "foot" | "car") => void;
   onClearNav?: () => void;
   mapTheme?: "dark" | "light";
+  centerOnUser?: number; // increment to trigger a flyTo to user position
 }
 
 function getStyleUrl(theme: "dark" | "light") {
@@ -168,6 +169,7 @@ export default function MapView({
   onNavModeChange,
   onClearNav,
   mapTheme = "dark",
+  centerOnUser = 0,
 }: MapViewProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -178,6 +180,7 @@ export default function MapView({
   const locMarkerRefs = useRef<Record<string, any>>({});
   const [mapReady, setMapReady] = useState(false);
   const [viewMode, setViewMode] = useState<"overview" | "3d">("overview");
+  const centerOnUserRef = useRef(0);
   const [routeDistanceM, setRouteDistanceM] = useState<number | null>(null);
   const prevPositionRef = useRef<GpsPosition | null>(null);
   const mapThemeRef = useRef(mapTheme);
@@ -388,6 +391,20 @@ export default function MapView({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapReady, userPosition, viewMode, navTarget, navMode]);
+
+  // Fly to user when centerOnUser counter increments (Locate Me button)
+  useEffect(() => {
+    if (!mapReady || !mapRef.current || !userPosition) return;
+    if (centerOnUser === 0) return; // skip initial mount
+    if (centerOnUser === centerOnUserRef.current) return;
+    centerOnUserRef.current = centerOnUser;
+    mapRef.current.flyTo({
+      center: [userPosition.lng, userPosition.lat],
+      zoom: 16,
+      duration: 900,
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [centerOnUser, mapReady]);
 
   // View-mode switch
   useEffect(() => {

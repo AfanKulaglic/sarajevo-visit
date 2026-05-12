@@ -48,6 +48,7 @@ export default function MapPage() {
   const [navMode, setNavMode] = useState<"foot" | "car">("foot");
   const [outOfRangeLoc, setOutOfRangeLoc] = useState<{ loc: Location; dist: number } | null>(null);
   const [navMenuLoc, setNavMenuLoc] = useState<Location | null>(null);
+  const [centerOnUser, setCenterOnUser] = useState(0);
   const [mapTheme, setMapTheme] = useState<"dark" | "light">(() => {
     if (typeof window !== "undefined") {
       return (localStorage.getItem("saraya_map_theme") as "dark" | "light") || "dark";
@@ -173,6 +174,7 @@ export default function MapPage() {
       const pos = await getCurrentPosition();
       setUserPosition(pos);
       setLocationPermission("granted");
+      setCenterOnUser((n) => n + 1); // trigger MapView flyTo
       showToast("Location found!", "info");
     } catch (err) {
       setLocationPermission("denied");
@@ -289,6 +291,7 @@ export default function MapPage() {
               onNavModeChange={(m) => setNavMode(m)}
               onClearNav={() => setNavTarget(null)}
               mapTheme={mapTheme}
+              centerOnUser={centerOnUser}
             />
           </div>
         )}
