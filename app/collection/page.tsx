@@ -124,15 +124,14 @@ export default function CollectionPage() {
                 key={loc.id}
                 className={`relative rounded-2xl overflow-hidden border flex flex-col transition-all duration-200 ${
                   collected
-                    ? "border-purple-500/[0.15]"
+                    ? "border-purple-500/[0.15] active:scale-[0.98] cursor-pointer"
                     : "border-white/[0.05]"
                 }`}
                 style={{ background: "#0E0B1A" }}
+                onClick={() => collected && setSelectedLoc(loc)}
               >
                 {/* Image section */}
-                <button
-                  onClick={() => collected && setSelectedLoc(loc)}
-                  disabled={!collected}
+                <div
                   className="relative w-full flex-shrink-0 flex items-center justify-center"
                   style={{ height: 120 }}
                 >
@@ -157,12 +156,12 @@ export default function CollectionPage() {
                       {String(idx + 1).padStart(2, "0")}
                     </span>
                   </div>
-                </button>
+                </div>
 
                 {/* Divider */}
                 <div className={`h-px mx-0 ${collected ? "bg-purple-500/[0.08]" : "bg-white/[0.04]"}`} />
 
-                {/* Text + navigate */}
+                {/* Text + action button */}
                 <div className="flex flex-col flex-1 px-3 pt-2.5 pb-3">
                   <p className={`text-[12px] font-semibold leading-tight ${
                     collected ? "text-white/90" : "text-white/22"
@@ -174,15 +173,31 @@ export default function CollectionPage() {
                   }`}>
                     {locContent.description}
                   </p>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); setNavMenuLoc(loc); }}
-                    className="mt-auto pt-2 w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-[10px] font-bold tracking-wide transition-all active:scale-[0.97] bg-purple-500/[0.14] text-purple-300 border border-purple-500/[0.18]"
-                  >
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polygon points="3 11 22 2 13 21 11 13 3 11"/>
-                    </svg>
-                    Navigate
-                  </button>
+
+                  {collected ? (
+                    /* Collected: View button opens detail/model */
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setSelectedLoc(loc); }}
+                      className="mt-auto pt-2 w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-[10px] font-bold tracking-wide transition-all active:scale-[0.97] bg-purple-500/[0.18] text-purple-200 border border-purple-500/[0.30]"
+                    >
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                      </svg>
+                      View
+                    </button>
+                  ) : (
+                    /* Not collected: Navigate button */
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setNavMenuLoc(loc); }}
+                      className="mt-auto pt-2 w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-[10px] font-bold tracking-wide transition-all active:scale-[0.97] bg-purple-500/[0.14] text-purple-300 border border-purple-500/[0.18]"
+                    >
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2L2 22l10-5 10 5L12 2z"/>
+                      </svg>
+                      Navigate
+                    </button>
+                  )}
                 </div>
               </div>
             );
