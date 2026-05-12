@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Navbar from "@/components/Navbar";
 import LandmarkDetail from "@/components/LandmarkDetail";
@@ -10,46 +9,7 @@ import { subscribeLocations } from "@/lib/locationStorage";
 import { useGame } from "@/context/GameContext";
 import { useLanguage } from "@/context/LanguageContext";
 
-// Dynamically import the WebGL viewer so it never runs on the server
-const ObjModelViewer = dynamic(() => import("@/components/ObjModelViewer"), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full flex items-center justify-center">
-      <div className="w-6 h-6 rounded-full border-2 border-purple-500/40 border-t-purple-500 animate-spin" />
-    </div>
-  ),
-});
 
-// ── Mini model strip (list row thumbnail) ──────────────────────────────────────
-// Uses emoji only — no WebGL Canvas per row (avoids context limit + crash)
-
-function MiniModelStrip({ loc, collected }: { loc: Location; collected: boolean }) {
-  if (collected && loc.icon) {
-    return (
-      <img
-        src={loc.icon}
-        alt={loc.name}
-        className="w-[34px] h-[34px] object-contain transition-all duration-200"
-      />
-    );
-  }
-  return (
-    <div
-      className={`w-10 h-10 transition-all duration-200 ${
-        collected ? "" : "grayscale opacity-20"
-      }`}
-    >
-      {collected
-        ? (loc.icon
-            ? <img src={loc.icon} alt={loc.name} className="w-full h-full object-contain" />
-            : <span className="text-[30px]">{loc.emoji}</span>)
-        : <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-white/40">
-            <rect x="3" y="11" width="18" height="11" rx="2"/>
-            <path d="M7 11V7a5 5 0 0110 0v4"/>
-          </svg>}
-    </div>
-  );
-}
 
 // ── Collection page ────────────────────────────────────────────────────────────
 
@@ -162,20 +122,38 @@ export default function CollectionPage() {
                     : "bg-[#07090f] border-white/[0.04]"
                 }`}
               >
-                <div className="flex items-stretch" style={{ minHeight: 80 }}>
-                  {/* Visual strip */}
-                  <div
-                    className={`w-[68px] flex-shrink-0 flex items-center justify-center relative ${
-                      collected ? "bg-[#0f1520]" : "bg-[#050609]"
-                    }`}
-                  >
-                    {/* Separator */}
-                    <div
-                      className={`absolute right-0 top-4 bottom-4 w-px ${
-                        collected ? "bg-purple-500/[0.08]" : "bg-white/[0.03]"
-                      }`}
-                    />
-                    <MiniModelStrip loc={loc} collected={collected} />
+                <div className="flex items-stretch" style={{ minHeight: 88 }}>
+                  {/* Image thumbnail */}
+                  <div className="w-[80px] flex-shrink-0 relative overflow-hidden bg-black">
+                    {loc.icon ? (
+                      <img
+                        src={loc.icon}
+                        alt={locContent.name}
+                        className="absolute inset-0 w-full h-full object-cover"
+                        style={{
+                          filter: collected
+                            ? "brightness(1) saturate(1)"
+                            : "brightness(0.07) saturate(0) contrast(1.4)",
+                          transition: "filter 0.5s ease",
+                        }}
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-[#050609]" />
+                    )}
+                    {!collected && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div
+                          className="w-8 h-8 rounded-xl flex items-center justify-center"
+                          style={{ background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
+                        >
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2"/>
+                            <path d="M7 11V7a5 5 0 0110 0v4"/>
+                          </svg>
+                        </div>
+                      </div>
+                    )}
+                    <div className="absolute right-0 inset-y-0 w-px bg-white/[0.05]" />
                   </div>
 
                   {/* Text content */}
