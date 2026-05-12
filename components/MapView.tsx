@@ -618,30 +618,37 @@ export default function MapView({
 
 function applyUserMarkerStyle(el: HTMLElement, is3d: boolean, navMode: "foot" | "car" = "foot", isMoving = false) {
   if (is3d && navMode === "foot") {
-    // Walking person SVG — arm/leg animation when moving
     const animStyle = isMoving
       ? `<style>
-          @keyframes walkArm{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(30deg)}}
-          @keyframes walkLeg{0%,100%{transform:rotate(30deg)}50%{transform:rotate(-30deg)}}
-          .wa{transform-origin:10px 14px;animation:walkArm 0.5s ease-in-out infinite}
-          .wb{transform-origin:10px 14px;animation:walkArm 0.5s ease-in-out infinite reverse}
-          .wc{transform-origin:10px 22px;animation:walkLeg 0.5s ease-in-out infinite}
-          .wd{transform-origin:10px 22px;animation:walkLeg 0.5s ease-in-out infinite reverse}
+          @keyframes legF{0%,100%{transform:rotate(-28deg) translateX(0)}50%{transform:rotate(28deg) translateX(0)}}
+          @keyframes legB{0%,100%{transform:rotate(28deg) translateX(0)}50%{transform:rotate(-28deg) translateX(0)}}
+          @keyframes armF{0%,100%{transform:rotate(22deg)}50%{transform:rotate(-22deg)}}
+          @keyframes armB{0%,100%{transform:rotate(-22deg)}50%{transform:rotate(22deg)}}
+          .lf{transform-origin:12px 19px;animation:legF 0.5s ease-in-out infinite}
+          .lb{transform-origin:12px 19px;animation:legB 0.5s ease-in-out infinite}
+          .af{transform-origin:12px 13px;animation:armF 0.5s ease-in-out infinite}
+          .ab{transform-origin:12px 13px;animation:armB 0.5s ease-in-out infinite}
         </style>` : "";
     el.innerHTML = `
-      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="44" viewBox="0 0 20 32">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="52" viewBox="0 0 24 32">
         ${animStyle}
-        <circle cx="10" cy="4" r="3" fill="#c084fc" stroke="white" stroke-width="0.8"/>
-        <line x1="10" y1="7" x2="10" y2="18" stroke="#c084fc" stroke-width="2" stroke-linecap="round"/>
-        <line class="wa" x1="10" y1="11" x2="4" y2="17" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round"/>
-        <line class="wb" x1="10" y1="11" x2="16" y2="17" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round"/>
-        <line class="wc" x1="10" y1="18" x2="5" y2="27" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round"/>
-        <line class="wd" x1="10" y1="18" x2="15" y2="27" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round"/>
+        <!-- head -->
+        <circle cx="12" cy="4.5" r="3" fill="#c084fc"/>
+        <!-- body -->
+        <path d="M9 9 Q12 8 15 9 L14 19 Q12 20 10 19 Z" fill="#c084fc"/>
+        <!-- back arm -->
+        <rect class="ab" x="11" y="12" width="2.2" height="8" rx="1.1" fill="#a855f7"/>
+        <!-- back leg -->
+        <rect class="lb" x="11" y="18" width="2.2" height="9" rx="1.1" fill="#a855f7"/>
+        <!-- front arm -->
+        <rect class="af" x="11" y="12" width="2.2" height="8" rx="1.1" fill="#c084fc"/>
+        <!-- front leg -->
+        <rect class="lf" x="11" y="18" width="2.2" height="9" rx="1.1" fill="#c084fc"/>
       </svg>`;
     el.style.cssText = [
-      "width:36px",
-      "height:44px",
-      "filter:drop-shadow(0 0 8px rgba(168,85,247,0.9))",
+      "width:40px",
+      "height:52px",
+      "filter:drop-shadow(0 0 10px rgba(168,85,247,0.95)) drop-shadow(0 2px 4px rgba(0,0,0,0.6))",
     ].join(";");
   } else if (is3d && navMode === "car") {
     // Car SVG top-down view
