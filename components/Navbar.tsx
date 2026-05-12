@@ -52,6 +52,7 @@ export default function Navbar() {
   const { t, lang, setLang } = useLanguage();
   const pathname = usePathname();
   const [showSettings, setShowSettings] = useState(false);
+  const [closingSettings, setClosingSettings] = useState(false);
   const [showLangPicker, setShowLangPicker] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
@@ -61,6 +62,17 @@ export default function Navbar() {
     }
     return "dark";
   });
+
+  function closeSettings() {
+    setClosingSettings(true);
+    setTimeout(() => {
+      setShowSettings(false);
+      setClosingSettings(false);
+      setShowLangPicker(false);
+      setShowPrivacy(false);
+      setShowTerms(false);
+    }, 340);
+  }
 
   function toggleMapTheme() {
     const next = mapTheme === "dark" ? "light" : "dark";
@@ -85,8 +97,12 @@ export default function Navbar() {
       {showSettings && (
         <div
           className="fixed inset-0 z-[80] flex flex-col justify-end"
-          style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)", animation: "fadeIn 0.22s ease both" }}
-          onClick={() => { setShowSettings(false); setShowLangPicker(false); setShowPrivacy(false); setShowTerms(false); }}
+          style={{
+            background: "rgba(0,0,0,0.6)",
+            backdropFilter: "blur(8px)",
+            animation: closingSettings ? "fadeOut 0.32s ease forwards" : "fadeIn 0.22s ease both",
+          }}
+          onClick={closeSettings}
         >
           <div
             className="relative w-full max-w-md mx-auto rounded-t-3xl overflow-hidden"
@@ -96,7 +112,7 @@ export default function Navbar() {
               borderBottom: "none",
               maxHeight: "90vh",
               overflowY: "auto",
-              animation: "slideUp 0.38s cubic-bezier(0.22,1,0.36,1) both",
+              animation: closingSettings ? "slideDown 0.34s cubic-bezier(0.4,0,1,1) forwards" : "slideUp 0.38s cubic-bezier(0.22,1,0.36,1) both",
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -115,7 +131,7 @@ export default function Navbar() {
                     <p className="text-white/35 text-xs mt-0.5">{user.email}</p>
                   </div>
                   <button
-                    onClick={() => setShowSettings(false)}
+                    onClick={closeSettings}
                     className="w-8 h-8 rounded-full flex items-center justify-center text-white/40 hover:text-white/70 transition-colors"
                     style={{ background: "rgba(255,255,255,0.06)" }}
                   >
@@ -240,7 +256,7 @@ export default function Navbar() {
                   <p className="text-white/30 text-[10px] font-bold tracking-[0.12em] uppercase mb-2">Account</p>
                   <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
                     <button
-                      onClick={() => { logout(); setShowSettings(false); }}
+                      onClick={() => { logout(); closeSettings(); }}
                       className="w-full flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-white/[0.03] active:bg-white/[0.06]"
                     >
                       <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "rgba(239,68,68,0.12)" }}>

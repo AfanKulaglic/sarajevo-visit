@@ -49,6 +49,14 @@ body {
   from { opacity: 0; transform: translateY(40px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+@keyframes slideDown {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(100%); }
+}
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
 
 .anim-fade-up   { animation: fadeUp   0.4s cubic-bezier(.16,1,.3,1) both; }
 .anim-fade-down { animation: fadeDown 0.35s cubic-bezier(.16,1,.3,1) both; }
