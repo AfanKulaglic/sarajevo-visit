@@ -165,15 +165,18 @@ export default function MapPage() {
 
         if (isUserNearLocation(pos.lat, pos.lng, location.lat, location.lng)) {
           if (hasCollected(location.reward)) {
-            // Already collected — open detail view directly
             setDiscoveredLoc(location);
           } else {
             collect(location.reward);
-            // Open the detail view immediately on new discovery
             setDiscoveredLoc(location);
           }
         } else {
-          setOutOfRangeLoc({ loc: location, dist: Math.round(dist) });
+          if (hasCollected(location.reward)) {
+            // Already collected — open detail regardless of distance
+            setDiscoveredLoc(location);
+          } else {
+            setOutOfRangeLoc({ loc: location, dist: Math.round(dist) });
+          }
         }
       } catch (err) {
         showToast(err instanceof Error ? err.message : "Location check failed.", "error");
