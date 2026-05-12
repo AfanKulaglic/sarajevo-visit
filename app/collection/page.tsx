@@ -195,11 +195,7 @@ export default function CollectionPage() {
                   </p>
                   <button
                     onClick={(e) => openNavSheet(loc, e)}
-                    className={`mt-1 w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-[10px] font-bold tracking-wide transition-all active:scale-[0.97] ${
-                      collected
-                        ? "bg-purple-500/[0.14] text-purple-300 border border-purple-500/[0.18]"
-                        : "bg-white/[0.04] text-white/20 border border-white/[0.05]"
-                    }`}
+                    className="mt-1 w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-[10px] font-bold tracking-wide transition-all active:scale-[0.97] bg-purple-500/[0.14] text-purple-300 border border-purple-500/[0.18]"
                   >
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <polygon points="3 11 22 2 13 21 11 13 3 11"/>
