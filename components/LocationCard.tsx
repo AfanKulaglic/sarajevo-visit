@@ -10,7 +10,7 @@ const NavigateIcon = () => (
   </svg>
 );
 
-function NavMenu({ loc, onClose, onNavigate }: { loc: Location; onClose: () => void; onNavigate?: (loc: Location, mode: "foot" | "car") => void }) {
+export function NavMenu({ loc, onClose, onNavigate }: { loc: Location; onClose: () => void; onNavigate?: (loc: Location, mode: "foot" | "car") => void }) {
   const { t, getLocContent } = useLanguage();
   const displayName = getLocContent(loc).name;
   const [mode, setMode] = useState<"foot" | "car">("foot");

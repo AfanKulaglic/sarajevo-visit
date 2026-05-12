@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Navbar from "@/components/Navbar";
 import LandmarkDetail from "@/components/LandmarkDetail";
+import { NavMenu } from "@/components/LocationCard";
 import { locations as defaultLocations, Location } from "@/lib/locations";
 import { subscribeLocations } from "@/lib/locationStorage";
 import { useGame } from "@/context/GameContext";
@@ -19,27 +20,7 @@ export default function CollectionPage() {
   const { t, lang, getLocContent } = useLanguage();
   const [activeLocations, setActiveLocations] = useState<Location[]>(defaultLocations);
   const [selectedLoc, setSelectedLoc] = useState<Location | null>(null);
-  const [navSheetLoc, setNavSheetLoc] = useState<Location | null>(null);
-  const [navSheetClosing, setNavSheetClosing] = useState(false);
-  const navSheetClosingRef = useRef(false);
-
-  function openNavSheet(loc: Location, e: React.MouseEvent) {
-    e.stopPropagation();
-    setNavSheetLoc(loc);
-    setNavSheetClosing(false);
-    navSheetClosingRef.current = false;
-  }
-
-  function closeNavSheet() {
-    if (navSheetClosingRef.current) return;
-    navSheetClosingRef.current = true;
-    setNavSheetClosing(true);
-    setTimeout(() => {
-      setNavSheetLoc(null);
-      setNavSheetClosing(false);
-      navSheetClosingRef.current = false;
-    }, 320);
-  }
+  const [navMenuLoc, setNavMenuLoc] = useState<Location | null>(null);
 
   function startNavigation(loc: Location, mode: "foot" | "car") {
     localStorage.setItem("saraya_pending_nav", JSON.stringify({ id: loc.id, mode }));
@@ -194,7 +175,7 @@ export default function CollectionPage() {
                     {locContent.description}
                   </p>
                   <button
-                    onClick={(e) => openNavSheet(loc, e)}
+                    onClick={(e) => { e.stopPropagation(); setNavMenuLoc(loc); }}
                     className="mt-auto pt-2 w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-[10px] font-bold tracking-wide transition-all active:scale-[0.97] bg-purple-500/[0.14] text-purple-300 border border-purple-500/[0.18]"
                   >
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -216,85 +197,13 @@ export default function CollectionPage() {
         <LandmarkDetail loc={selectedLoc} onClose={() => setSelectedLoc(null)} />
       )}
 
-      {/* Nav mode picker sheet */}
-      {navSheetLoc && (
-        <div
-          className="fixed inset-0 z-[90] flex flex-col justify-end"
-          style={{
-            background: "rgba(0,0,0,0.65)",
-            backdropFilter: "blur(8px)",
-            animation: navSheetClosing ? "fadeOut 0.28s ease forwards" : "fadeIn 0.22s ease both",
-          }}
-          onClick={closeNavSheet}
-        >
-          <div
-            className="w-full max-w-md mx-auto rounded-t-3xl px-5 pt-6 pb-10"
-            style={{
-              background: "#0E0B1A",
-              border: "1px solid rgba(255,255,255,0.06)",
-              borderBottom: "none",
-              animation: navSheetClosing
-                ? "slideDown 0.32s cubic-bezier(0.4,0,1,1) forwards"
-                : "slideUp 0.38s cubic-bezier(0.22,1,0.36,1) both",
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between mb-5">
-              <div>
-                <p className="text-white font-semibold text-[15px] leading-tight">
-                  {getLocContent(navSheetLoc).name}
-                </p>
-                <p className="text-white/35 text-[11px] mt-0.5">Choose how you want to get there</p>
-              </div>
-              <button
-                onClick={closeNavSheet}
-                className="w-8 h-8 rounded-full flex items-center justify-center text-white/40 hover:text-white/70 transition-colors"
-                style={{ background: "rgba(255,255,255,0.06)" }}
-              >
-                <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <path d="M2 2l10 10M12 2L2 12"/>
-                </svg>
-              </button>
-            </div>
-
-            {/* Mode buttons */}
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => startNavigation(navSheetLoc, "foot")}
-                className="flex flex-col items-center gap-3 py-5 rounded-2xl border border-white/[0.07] bg-white/[0.03] active:scale-[0.97] transition-all hover:border-purple-500/30 hover:bg-purple-500/[0.06]"
-              >
-                <div className="w-11 h-11 rounded-2xl bg-purple-500/[0.14] border border-purple-500/20 flex items-center justify-center">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c084fc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="5" r="1.5"/>
-                    <path d="M10 9l-2 6h4l2 5M10 9l4 2 2-2M10 9l-1 4"/>
-                  </svg>
-                </div>
-                <div className="text-center">
-                  <p className="text-white/85 font-semibold text-[13px]">Walk</p>
-                  <p className="text-white/30 text-[10px] mt-0.5">On foot</p>
-                </div>
-              </button>
-
-              <button
-                onClick={() => startNavigation(navSheetLoc, "car")}
-                className="flex flex-col items-center gap-3 py-5 rounded-2xl border border-white/[0.07] bg-white/[0.03] active:scale-[0.97] transition-all hover:border-blue-500/30 hover:bg-blue-500/[0.06]"
-              >
-                <div className="w-11 h-11 rounded-2xl bg-blue-500/[0.12] border border-blue-500/20 flex items-center justify-center">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 17H3a2 2 0 01-2-2v-4l2.5-5h13l2.5 5v4a2 2 0 01-2 2h-2"/>
-                    <circle cx="7.5" cy="17.5" r="2.5"/>
-                    <circle cx="16.5" cy="17.5" r="2.5"/>
-                  </svg>
-                </div>
-                <div className="text-center">
-                  <p className="text-white/85 font-semibold text-[13px]">Drive</p>
-                  <p className="text-white/30 text-[10px] mt-0.5">By car</p>
-                </div>
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* Shared NavMenu — identical to map list */}
+      {navMenuLoc && (
+        <NavMenu
+          loc={navMenuLoc}
+          onClose={() => setNavMenuLoc(null)}
+          onNavigate={(loc, mode) => { setNavMenuLoc(null); startNavigation(loc, mode); }}
+        />
       )}
     </ProtectedRoute>
   );
