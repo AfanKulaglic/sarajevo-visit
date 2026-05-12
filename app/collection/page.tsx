@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Navbar from "@/components/Navbar";
 import LandmarkDetail from "@/components/LandmarkDetail";
@@ -10,20 +9,7 @@ import { subscribeLocations } from "@/lib/locationStorage";
 import { useGame } from "@/context/GameContext";
 import { useLanguage } from "@/context/LanguageContext";
 
-// Dynamically import the WebGL viewer so it never runs on the server
-const ObjModelViewer = dynamic(() => import("@/components/ObjModelViewer"), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full flex items-center justify-center">
-      <div className="w-6 h-6 rounded-full border-2 border-purple-500/40 border-t-purple-500 animate-spin" />
-    </div>
-  ),
-});
 
-// ── Mini model strip (list row thumbnail) ──────────────────────────────────────
-// Uses emoji only — no WebGL Canvas per row (avoids context limit + crash)
-
-function MiniModelStrip({ loc, collected }: { loc: Location; collected: boolean }) {
 // ── Collection page ────────────────────────────────────────────────────────────
 
 export default function CollectionPage() {
