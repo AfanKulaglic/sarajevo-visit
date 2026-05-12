@@ -182,20 +182,20 @@ export default function CollectionPage() {
                 <div className={`h-px mx-0 ${collected ? "bg-purple-500/[0.08]" : "bg-white/[0.04]"}`} />
 
                 {/* Text + navigate */}
-                <div className="flex flex-col gap-1.5 px-3 pt-2.5 pb-3">
+                <div className="flex flex-col flex-1 px-3 pt-2.5 pb-3">
                   <p className={`text-[12px] font-semibold leading-tight ${
                     collected ? "text-white/90" : "text-white/22"
                   }`}>
                     {locContent.name}
                   </p>
-                  <p className={`text-[10px] leading-snug line-clamp-2 ${
+                  <p className={`text-[10px] leading-snug line-clamp-2 mt-1 ${
                     collected ? "text-white/35" : "text-white/12"
                   }`}>
                     {locContent.description}
                   </p>
                   <button
                     onClick={(e) => openNavSheet(loc, e)}
-                    className="mt-1 w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-[10px] font-bold tracking-wide transition-all active:scale-[0.97] bg-purple-500/[0.14] text-purple-300 border border-purple-500/[0.18]"
+                    className="mt-auto pt-2 w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-[10px] font-bold tracking-wide transition-all active:scale-[0.97] bg-purple-500/[0.14] text-purple-300 border border-purple-500/[0.18]"
                   >
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <polygon points="3 11 22 2 13 21 11 13 3 11"/>
