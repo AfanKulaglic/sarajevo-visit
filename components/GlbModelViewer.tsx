@@ -66,7 +66,7 @@ function GlbMesh({ glbUrl }: { glbUrl: string }) {
     cloned.position.sub(center);
 
     const fov = (camera as THREE.PerspectiveCamera).fov * (Math.PI / 180);
-    const dist = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.8;
+    const dist = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.25;
     camera.position.set(0, size.y * 0.15, dist);
     camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
@@ -74,11 +74,6 @@ function GlbMesh({ glbUrl }: { glbUrl: string }) {
   }, [cloned, camera, invalidate]);
 
   const groupRef = useRef<THREE.Group>(null);
-  useFrame((_, delta) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y += delta * 0.35;
-    }
-  });
 
   return (
     <group ref={groupRef}>
@@ -148,7 +143,7 @@ export default function GlbModelViewer({
       ) : (
         <ModelErrorBoundary emoji={emoji} icon={icon}>
           <Canvas
-            frameloop="demand"
+            frameloop="always"
             gl={{
               antialias: !isMobile,
               alpha: true,
@@ -169,7 +164,7 @@ export default function GlbModelViewer({
 
             <OrbitControls
               autoRotate
-              autoRotateSpeed={0.6}
+              autoRotateSpeed={0.5}
               enableZoom={true}
               enablePan={false}
               minPolarAngle={Math.PI * 0.1}
