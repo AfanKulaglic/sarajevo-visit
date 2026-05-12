@@ -651,21 +651,46 @@ function applyUserMarkerStyle(el: HTMLElement, is3d: boolean, navMode: "foot" | 
       "filter:drop-shadow(0 0 10px rgba(168,85,247,0.95)) drop-shadow(0 2px 4px rgba(0,0,0,0.6))",
     ].join(";");
   } else if (is3d && navMode === "car") {
-    // Car SVG top-down view
     el.innerHTML = `
-      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="44" viewBox="0 0 24 32">
-        <rect x="4" y="2" width="16" height="28" rx="5" fill="#3080ff" stroke="white" stroke-width="0.8"/>
-        <rect x="5" y="7" width="14" height="9" rx="2" fill="rgba(255,255,255,0.25)"/>
-        <rect x="2" y="6" width="3" height="5" rx="1.5" fill="rgba(255,255,255,0.15)"/>
-        <rect x="19" y="6" width="3" height="5" rx="1.5" fill="rgba(255,255,255,0.15)"/>
-        <rect x="2" y="21" width="3" height="5" rx="1.5" fill="rgba(255,255,255,0.1)"/>
-        <rect x="19" y="21" width="3" height="5" rx="1.5" fill="rgba(255,255,255,0.1)"/>
-        <rect x="8" y="25" width="8" height="3" rx="1" fill="rgba(255,100,100,0.7)"/>
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="56" viewBox="0 0 40 56">
+        <!-- shadow -->
+        <ellipse cx="20" cy="50" rx="10" ry="3" fill="rgba(0,0,0,0.3)"/>
+        <!-- front bumper -->
+        <rect x="11" y="3" width="18" height="4" rx="2" fill="#1a6fff"/>
+        <!-- headlights -->
+        <rect x="11" y="3" width="6" height="3" rx="1.5" fill="#e0f0ff" opacity="0.9"/>
+        <rect x="23" y="3" width="6" height="3" rx="1.5" fill="#e0f0ff" opacity="0.9"/>
+        <!-- body -->
+        <path d="M10 7 Q8 8 7 12 L7 42 Q7 47 10 48 L30 48 Q33 47 33 42 L33 12 Q32 8 30 7 Z" fill="#3080ff"/>
+        <!-- roof / cabin highlight -->
+        <path d="M13 14 Q14 12 20 12 Q26 12 27 14 L28 30 Q27 32 20 32 Q13 32 12 30 Z" fill="rgba(180,220,255,0.22)"/>
+        <!-- windshield -->
+        <path d="M14 13 Q20 11 26 13 L27 22 Q20 24 13 22 Z" fill="rgba(200,230,255,0.35)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+        <!-- rear window -->
+        <path d="M14 33 Q20 35 26 33 L27 28 Q20 30 13 28 Z" fill="rgba(200,230,255,0.2)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+        <!-- left front wheel -->
+        <rect x="5" y="10" width="5" height="9" rx="2.5" fill="#1a1a2e" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+        <!-- right front wheel -->
+        <rect x="30" y="10" width="5" height="9" rx="2.5" fill="#1a1a2e" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+        <!-- left rear wheel -->
+        <rect x="5" y="34" width="5" height="9" rx="2.5" fill="#1a1a2e" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+        <!-- right rear wheel -->
+        <rect x="30" y="34" width="5" height="9" rx="2.5" fill="#1a1a2e" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+        <!-- wheel rims -->
+        <circle cx="7.5" cy="14.5" r="2" fill="rgba(255,255,255,0.15)"/>
+        <circle cx="32.5" cy="14.5" r="2" fill="rgba(255,255,255,0.15)"/>
+        <circle cx="7.5" cy="38.5" r="2" fill="rgba(255,255,255,0.15)"/>
+        <circle cx="32.5" cy="38.5" r="2" fill="rgba(255,255,255,0.15)"/>
+        <!-- rear taillights -->
+        <rect x="11" y="44" width="6" height="3" rx="1.5" fill="rgba(255,60,60,0.85)"/>
+        <rect x="23" y="44" width="6" height="3" rx="1.5" fill="rgba(255,60,60,0.85)"/>
+        <!-- body shine -->
+        <path d="M15 8 Q20 7 25 8 L25 11 Q20 10 15 11 Z" fill="rgba(255,255,255,0.12)"/>
       </svg>`;
     el.style.cssText = [
-      "width:36px",
-      "height:44px",
-      "filter:drop-shadow(0 0 8px rgba(48,128,255,0.9))",
+      "width:40px",
+      "height:56px",
+      "filter:drop-shadow(0 0 10px rgba(48,128,255,0.95)) drop-shadow(0 2px 4px rgba(0,0,0,0.6))",
     ].join(";");
   } else {
     el.innerHTML = "";
