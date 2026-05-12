@@ -6,6 +6,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import Navbar from "@/components/Navbar";
 import LocationCard, { NavMenu } from "@/components/LocationCard";
 import LandmarkDetail from "@/components/LandmarkDetail";
+import DiscoveryCelebration from "@/components/DiscoveryCelebration";
 import OnboardingOverlay from "@/components/OnboardingOverlay";
 import LanguagePickerOverlay from "@/components/LanguagePickerOverlay";
 import { LANG_CHOSEN_KEY, useLanguage } from "@/context/LanguageContext";
@@ -42,6 +43,7 @@ export default function MapPage() {
   const [toast, setToast] = useState<Toast | null>(null);
   const [showList, setShowList] = useState(false);
   const [discoveredLoc, setDiscoveredLoc] = useState<Location | null>(null);
+  const [celebrationLoc, setCelebrationLoc] = useState<Location | null>(null);
   const [navTarget, setNavTarget] = useState<Location | null>(null);
   const [navMode, setNavMode] = useState<"foot" | "car">("foot");
   const [outOfRangeLoc, setOutOfRangeLoc] = useState<{ loc: Location; dist: number } | null>(null);
@@ -140,7 +142,7 @@ export default function MapPage() {
             setDiscoveredLoc(location);
           } else {
             collect(location.reward);
-            setDiscoveredLoc(location);
+            setCelebrationLoc(location); // show unlock celebration before detail
           }
         } else {
           if (hasCollected(location.reward)) {
@@ -404,6 +406,17 @@ export default function MapPage() {
           loc={navMenuLoc}
           onClose={() => { setNavMenuLoc(null); setOutOfRangeLoc(null); }}
           onNavigate={(loc, mode) => { setNavMenuLoc(null); setOutOfRangeLoc(null); handleNavigateInApp(loc, mode); }}
+        />
+      )}
+
+      {/* Unlock celebration — shown only on first discovery, before the detail view */}
+      {celebrationLoc && (
+        <DiscoveryCelebration
+          loc={celebrationLoc}
+          collectedCount={collectedItems.length}
+          totalCount={activeLocations.length}
+          onViewDetails={() => { setDiscoveredLoc(celebrationLoc); setCelebrationLoc(null); }}
+          onClose={() => setCelebrationLoc(null)}
         />
       )}
 
