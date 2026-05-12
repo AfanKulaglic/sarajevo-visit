@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -66,9 +66,9 @@ export default function Navbar() {
 
   return (
     <>
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+      {/* ══════════════════════════════════════════════════════════════
           SETTINGS SHEET
-      â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      ══════════════════════════════════════════════════════════════ */}
       {showSettings && (
         <div
           className="fixed inset-0 z-[80] flex flex-col justify-end"
@@ -91,7 +91,7 @@ export default function Navbar() {
               <div className="w-10 h-1 rounded-full bg-white/15" />
             </div>
 
-            {/* â”€â”€ MAIN SETTINGS VIEW â”€â”€ */}
+            {/* ── MAIN SETTINGS VIEW ── */}
             {!showLangPicker && !showPrivacy && !showTerms && (
               <>
                 {/* Header */}
@@ -210,12 +210,12 @@ export default function Navbar() {
                 {/* App info footer */}
                 <div className="px-5 pt-3 pb-[max(24px,env(safe-area-inset-bottom,24px))] flex flex-col items-center gap-1">
                   <p className="text-white/20 text-[11px]">Sarajevo Hotspot</p>
-                  <p className="text-white/15 text-[10px]">v1.0.0 Â· Made with â™¥ in Sarajevo</p>
+                  <p className="text-white/15 text-[10px]">v1.0.0 · Made with ♥ in Sarajevo</p>
                 </div>
               </>
             )}
 
-            {/* â”€â”€ LANGUAGE PICKER SUB-VIEW â”€â”€ */}
+            {/* ── LANGUAGE PICKER SUB-VIEW ── */}
             {showLangPicker && (
               <>
                 <div className="px-5 pt-3 pb-4 flex items-center gap-3">
@@ -273,7 +273,7 @@ export default function Navbar() {
               </>
             )}
 
-            {/* â”€â”€ PRIVACY POLICY SUB-VIEW â”€â”€ */}
+            {/* ── PRIVACY POLICY SUB-VIEW ── */}
             {showPrivacy && (
               <>
                 <div className="px-5 pt-3 pb-4 flex items-center gap-3">
@@ -315,7 +315,7 @@ export default function Navbar() {
               </>
             )}
 
-            {/* â”€â”€ TERMS OF USE SUB-VIEW â”€â”€ */}
+            {/* ── TERMS OF USE SUB-VIEW ── */}
             {showTerms && (
               <>
                 <div className="px-5 pt-3 pb-4 flex items-center gap-3">
@@ -364,9 +364,9 @@ export default function Navbar() {
         </div>
       )}
 
-      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-          BOTTOM NAV â€” 3 tabs: Map Â· Collection Â· Settings
-      â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/* ══════════════════════════════════════════════════════════════
+          BOTTOM NAV — 3 tabs: Map · Collection · Settings
+      ══════════════════════════════════════════════════════════════ */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 select-none">
         <div className="absolute inset-0 bg-[#0a0d14]/95 backdrop-blur-xl border-t border-white/[0.05]" />
         <div
@@ -417,4 +417,5 @@ export default function Navbar() {
     </>
   );
 }
+
 

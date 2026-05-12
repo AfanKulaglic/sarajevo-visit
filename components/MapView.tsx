@@ -704,3 +704,4 @@ function applyUserMarkerStyle(el: HTMLElement, is3d: boolean, navMode: "foot" | 
     ].join(";");
   }
 }
+

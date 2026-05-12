@@ -494,3 +494,4 @@ export default function LandmarkDetail({
     </div>
   );
 }
+

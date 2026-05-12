@@ -160,3 +160,4 @@ export default function OnboardingOverlay({ locationCount, onDone }: Props) {
     </div>
   );
 }
+

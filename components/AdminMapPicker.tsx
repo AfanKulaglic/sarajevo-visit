@@ -110,3 +110,4 @@ export default function AdminMapPicker({ lat, lng, emoji, onPick }: AdminMapPick
     />
   );
 }
+
