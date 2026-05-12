@@ -72,7 +72,7 @@ function ObjMesh({
     const maxDim = Math.max(size.x, size.y, size.z);
     obj.position.sub(center);
     const fov = (camera as THREE.PerspectiveCamera).fov * (Math.PI / 180);
-    const dist = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.25;
+    const dist = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 0.9;
     camera.position.set(0, size.y * 0.15, dist);
     camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
