@@ -85,7 +85,7 @@ export default function Navbar() {
       {showSettings && (
         <div
           className="fixed inset-0 z-[80] flex flex-col justify-end"
-          style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }}
+          style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)", animation: "fadeIn 0.22s ease both" }}
           onClick={() => { setShowSettings(false); setShowLangPicker(false); setShowPrivacy(false); setShowTerms(false); }}
         >
           <div
@@ -96,6 +96,7 @@ export default function Navbar() {
               borderBottom: "none",
               maxHeight: "90vh",
               overflowY: "auto",
+              animation: "slideUp 0.38s cubic-bezier(0.22,1,0.36,1) both",
             }}
             onClick={(e) => e.stopPropagation()}
           >
