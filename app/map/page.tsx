@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Navbar from "@/components/Navbar";
 import LocationCard from "@/components/LocationCard";
@@ -83,30 +83,50 @@ export default function MapPage() {
     return () => window.removeEventListener("mapthemechange", handler);
   }, []);
 
-  const [pendingNav, setPendingNav] = useState<{ id: string; mode: "foot" | "car" } | null>(null);
+  // Load locations from Firebase RTDB in real-time
+  useEffect(() => {
+    return subscribeLocations((locs) => setActiveLocations(locs));
+  }, []);
 
   // Load locations from Firebase RTDB in real-time
   useEffect(() => {
     return subscribeLocations((locs) => setActiveLocations(locs));
   }, []);
 
-  // Read and clear pending nav intent once on mount (set by collection page)
+  // Handle pending navigation intent from the collection page.
+  // Read from localStorage once on mount, then execute only when BOTH GPS
+  // and locations are ready so the route is drawn correctly from the start.
+  const pendingNavHandled = useRef(false);
+  const pendingNavData = useRef<{ id: string; mode: "foot" | "car" } | null>(null);
+
+  // Step 1: read + clear localStorage immediately on mount
   useEffect(() => {
     const raw = localStorage.getItem("saraya_pending_nav");
     if (!raw) return;
     localStorage.removeItem("saraya_pending_nav");
-    try { setPendingNav(JSON.parse(raw)); } catch {}
-  }, []);
+    try {
+      pendingNavData.current = JSON.parse(raw) as { id: string; mode: "foot" | "car" };
+    } catch {}
+    // Fallback: if GPS never arrives, navigate anyway after 8 s
+    const fallback = setTimeout(() => {
+      if (pendingNavHandled.current || !pendingNavData.current || activeLocations.length === 0) return;
+      pendingNavHandled.current = true;
+      const { id, mode } = pendingNavData.current;
+      const loc = activeLocations.find((l) => l.id === id);
+      if (loc) handleNavigateInApp(loc, mode);
+    }, 8000);
+    return () => clearTimeout(fallback);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Execute pending nav once locations are available
+  // Step 2: fire as soon as we have both a GPS fix AND the locations list
   useEffect(() => {
-    if (!pendingNav || activeLocations.length === 0) return;
-    const loc = activeLocations.find((l) => l.id === pendingNav.id);
-    if (loc) {
-      handleNavigateInApp(loc, pendingNav.mode);
-      setPendingNav(null);
-    }
-  }, [pendingNav, activeLocations]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (pendingNavHandled.current || !pendingNavData.current) return;
+    if (!userPosition || activeLocations.length === 0) return;
+    pendingNavHandled.current = true;
+    const { id, mode } = pendingNavData.current;
+    const loc = activeLocations.find((l) => l.id === id);
+    if (loc) handleNavigateInApp(loc, mode);
+  }, [userPosition, activeLocations]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Immediately trigger the native GPS permission prompt on mount
   useEffect(() => {
