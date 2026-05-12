@@ -64,7 +64,8 @@ export type TranslationKey =
   | "lbl_visit_to_unlock" | "lbl_all_discovered" | "lbl_landmarks_remaining"
   | "lbl_complete_collection" | "lbl_complete_collection_sub"
   // Map UI
-  | "lbl_collected" | "lbl_gps_blocked" | "btn_reload" | "btn_view_details";
+  | "lbl_collected" | "lbl_gps_blocked" | "btn_reload" | "btn_view_details"
+  | "onb_map_eyebrow" | "onb_map_dark" | "onb_map_light";
 
 type Translations = Record<TranslationKey, string>;
 
@@ -130,6 +131,9 @@ const en: Translations = {
   lbl_gps_blocked:        "Location access blocked",
   btn_reload:             "Reload",
   btn_view_details:       "View Details",
+  onb_map_eyebrow:        "Choose your map style",
+  onb_map_dark:           "Dark",
+  onb_map_light:          "Light",
 };
 
 const tr: Translations = {
@@ -192,6 +196,9 @@ const tr: Translations = {
   lbl_gps_blocked:        "Konum eri\u015Fimi engellendi",
   btn_reload:             "Yenile",
   btn_view_details:       "Detayları gör",
+  onb_map_eyebrow:        "Harita stilinizi seçin",
+  onb_map_dark:           "Koyu",
+  onb_map_light:          "Açık",
 };
 
 const ar: Translations = {
@@ -254,6 +261,9 @@ const ar: Translations = {
   lbl_gps_blocked:        "\u062A\u0645 \u062D\u0638\u0631 \u0627\u0644\u0648\u0635\u0648\u0644 \u0625\u0644\u0649 \u0627\u0644\u0645\u0648\u0642\u0639",
   btn_reload:             "\u0625\u0639\u0627\u062F\u0629 \u0627\u0644\u062A\u062D\u0645\u064A\u0644",
   btn_view_details:       "\u0639\u0631\u0636 \u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644",
+  onb_map_eyebrow:        "\u0627\u062e\u062a\u0631 \u0646\u0645\u0637 \u0627\u0644\u062e\u0631\u064a\u0637\u0629",
+  onb_map_dark:           "\u062f\u0627\u0643\u0646",
+  onb_map_light:          "\u0641\u0627\u062a\u062d",
 };
 
 const de: Translations = {
@@ -316,6 +326,9 @@ const de: Translations = {
   lbl_gps_blocked:        "Standortzugriff blockiert",
   btn_reload:             "Neu laden",
   btn_view_details:       "Details ansehen",
+  onb_map_eyebrow:        "Kartenstil w\u00e4hlen",
+  onb_map_dark:           "Dunkel",
+  onb_map_light:          "Hell",
 };
 
 const sl: Translations = {
@@ -378,6 +391,9 @@ const sl: Translations = {
   lbl_gps_blocked:        "Dostop do lokacije blokiran",
   btn_reload:             "Znova nalo\u017Ei",
   btn_view_details:       "Ogled podrobnosti",
+  onb_map_eyebrow:        "Izberite slog zemljevida",
+  onb_map_dark:           "Temno",
+  onb_map_light:          "Svetlo",
 };
 
 const it: Translations = {
@@ -440,6 +456,9 @@ const it: Translations = {
   lbl_gps_blocked:        "Accesso alla posizione bloccato",
   btn_reload:             "Ricarica",
   btn_view_details:       "Vedi dettagli",
+  onb_map_eyebrow:        "Scegli lo stile della mappa",
+  onb_map_dark:           "Scuro",
+  onb_map_light:          "Chiaro",
 };
 
 const fr: Translations = {
@@ -502,6 +521,9 @@ const fr: Translations = {
   lbl_gps_blocked:        "Acc\u00E8s \u00E0 la localisation bloqu\u00E9",
   btn_reload:             "Recharger",
   btn_view_details:       "Voir les d\u00E9tails",
+  onb_map_eyebrow:        "Choisissez le style de carte",
+  onb_map_dark:           "Sombre",
+  onb_map_light:          "Clair",
 };
 
 const es: Translations = {
@@ -564,6 +586,9 @@ const es: Translations = {
   lbl_gps_blocked:        "Acceso a la ubicaci\u00F3n bloqueado",
   btn_reload:             "Recargar",
   btn_view_details:       "Ver detalles",
+  onb_map_eyebrow:        "Elige tu estilo de mapa",
+  onb_map_dark:           "Oscuro",
+  onb_map_light:          "Claro",
 };
 
 const bs: Translations = {
@@ -626,6 +651,9 @@ const bs: Translations = {
   lbl_gps_blocked:        "Pristup lokaciji blokiran",
   btn_reload:             "Ponovo u\u010Ditaj",
   btn_view_details:       "Pogledaj detalje",
+  onb_map_eyebrow:        "Odaberite stil karte",
+  onb_map_dark:           "Tamna",
+  onb_map_light:          "Svijetla",
 };
 
 export const TRANSLATIONS: Record<LangCode, Translations> = { en, bs, tr, ar, de, sl, it, fr, es };
