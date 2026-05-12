@@ -481,41 +481,103 @@ export default function MapView({
       <div ref={mapContainerRef} className="w-full h-full" />
 
       {navTarget && (
-        <div
-          className="absolute bottom-24 left-3 right-3 z-[1000] rounded-3xl"
-          style={{
-            background: "rgba(14,11,26,0.96)",
-            border: navMode === "car" ? "1px solid rgba(48,128,255,0.4)" : "1px solid rgba(168,85,247,0.4)",
-            backdropFilter: "blur(20px)",
-            boxShadow: "0 8px 40px rgba(0,0,0,0.7)",
-          }}
-        >
-          {/* Top row: destination name + close */}
-          <div className="flex items-center gap-3 px-4 pt-4 pb-2">
-            <span className="text-2xl flex-shrink-0">{navTarget.emoji}</span>
-            <div className="flex-1 min-w-0">
-              <p className="text-white/50 text-[11px] font-semibold uppercase tracking-widest">
-                {navMode === "car" ? "Driving to" : "Walking to"}
-              </p>
-              <p className="text-white text-[15px] font-bold truncate leading-tight">
-                {navTarget.name}
-              </p>
+        <>
+          {/* Top card: mode + view toggles */}
+          <div
+            className="absolute top-3 left-3 right-3 z-[1000] flex gap-2 p-2 rounded-2xl"
+            style={{
+              background: "rgba(14,11,26,0.96)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              backdropFilter: "blur(20px)",
+              boxShadow: "0 4px 24px rgba(0,0,0,0.5)",
+            }}
+          >
+            {/* Walk / Drive toggle */}
+            <div className="flex flex-1 rounded-xl p-0.5 gap-0.5" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.07)" }}>
+              <button
+                onClick={() => onNavModeChange?.("foot")}
+                className="flex-1 flex items-center justify-center gap-2 py-2 rounded-[10px] text-[13px] font-bold transition-all duration-200"
+                style={navMode === "foot"
+                  ? { background: "rgba(168,85,247,0.25)", color: "#c084fc", border: "1px solid rgba(168,85,247,0.45)" }
+                  : { color: "rgba(255,255,255,0.3)", border: "1px solid transparent" }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="4" r="2"/>
+                  <path d="M9 20l1.5-5 2 2 1.5-3 1.5 6"/>
+                  <path d="M6.5 13.5C7.5 11.5 9.5 10.5 12 10.5s4.5 1 5.5 3"/>
+                </svg>
+                Walk
+              </button>
+              <button
+                onClick={() => onNavModeChange?.("car")}
+                className="flex-1 flex items-center justify-center gap-2 py-2 rounded-[10px] text-[13px] font-bold transition-all duration-200"
+                style={navMode === "car"
+                  ? { background: "rgba(48,128,255,0.25)", color: "#60a5fa", border: "1px solid rgba(48,128,255,0.45)" }
+                  : { color: "rgba(255,255,255,0.3)", border: "1px solid transparent" }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="1" y="11" width="22" height="7" rx="2"/>
+                  <path d="M5 11V7a2 2 0 012-2h10a2 2 0 012 2v4"/>
+                  <circle cx="7" cy="18" r="1.5"/><circle cx="17" cy="18" r="1.5"/>
+                </svg>
+                Drive
+              </button>
             </div>
-            <button
-              onClick={onClearNav}
-              className="w-8 h-8 flex items-center justify-center rounded-xl flex-shrink-0"
-              style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)" }}
-              aria-label="Stop navigation"
-            >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="2.5" strokeLinecap="round">
-                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-              </svg>
-            </button>
+
+            {/* Map / 3D toggle */}
+            <div className="flex rounded-xl p-0.5 gap-0.5" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.07)" }}>
+              <button
+                onClick={() => setViewMode("overview")}
+                className={"px-3 py-2 rounded-[10px] text-[13px] font-bold transition-all duration-200 " +
+                  (viewMode === "overview" ? "bg-purple-600 text-white" : "text-white/30")}
+              >
+                Map
+              </button>
+              <button
+                onClick={() => setViewMode("3d")}
+                className={"px-3 py-2 rounded-[10px] text-[13px] font-bold transition-all duration-200 " +
+                  (viewMode === "3d" ? "bg-purple-600 text-white" : "text-white/30")}
+              >
+                3D
+              </button>
+            </div>
           </div>
 
-          {/* Distance + time */}
-          <div className="flex items-end gap-3 px-4 pb-3">
-            <div>
+          {/* Bottom card: destination info */}
+          <div
+            className="absolute bottom-24 left-3 right-3 z-[1000] rounded-3xl"
+            style={{
+              background: "rgba(14,11,26,0.96)",
+              border: navMode === "car" ? "1px solid rgba(48,128,255,0.4)" : "1px solid rgba(168,85,247,0.4)",
+              backdropFilter: "blur(20px)",
+              boxShadow: "0 8px 40px rgba(0,0,0,0.7)",
+            }}
+          >
+            {/* Destination name + close */}
+            <div className="flex items-center gap-3 px-4 pt-4 pb-2">
+              <span className="text-2xl flex-shrink-0">{navTarget.emoji}</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-white/50 text-[11px] font-semibold uppercase tracking-widest">
+                  {navMode === "car" ? "Driving to" : "Walking to"}
+                </p>
+                <p className="text-white text-[15px] font-bold truncate leading-tight">
+                  {navTarget.name}
+                </p>
+              </div>
+              <button
+                onClick={onClearNav}
+                className="w-8 h-8 flex items-center justify-center rounded-xl flex-shrink-0"
+                style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)" }}
+                aria-label="Stop navigation"
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="2.5" strokeLinecap="round">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+
+            {/* Distance + time */}
+            <div className="px-4 pb-4">
               <p className="text-[32px] font-black leading-none" style={{ color: navMode === "car" ? "#60a5fa" : "#c084fc" }}>
                 {routeDistanceM !== null
                   ? formatDistance(routeDistanceM)
@@ -530,9 +592,7 @@ export default function MapView({
                       : formatWalkTime(routeDistanceM ?? straightDistM ?? 0) + " walk")
                   : "Calculating..."}
                 {userPosition && (
-                  <span className="ml-1.5 text-white/25">
-                    {bearingToLabel(bearing)}
-                  </span>
+                  <span className="ml-1.5 text-white/25">{bearingToLabel(bearing)}</span>
                 )}
                 {routeDistanceM === null && straightDistM !== null && (
                   <span className="ml-1 italic text-white/20">straight line</span>
@@ -540,60 +600,7 @@ export default function MapView({
               </p>
             </div>
           </div>
-
-          {/* Walk / Drive toggle + Overview / 3D */}
-          <div className="flex gap-2 px-4 pb-4">
-            {/* Mode toggle */}
-            <div className="flex flex-1 rounded-2xl p-1 gap-1" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <button
-                onClick={() => onNavModeChange?.("foot")}
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[13px] font-bold transition-all duration-200"
-                style={navMode === "foot"
-                  ? { background: "rgba(168,85,247,0.25)", color: "#c084fc", border: "1px solid rgba(168,85,247,0.45)" }
-                  : { color: "rgba(255,255,255,0.3)", border: "1px solid transparent" }}
-              >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="4" r="2"/>
-                  <path d="M9 20l1.5-5 2 2 1.5-3 1.5 6"/>
-                  <path d="M6.5 13.5C7.5 11.5 9.5 10.5 12 10.5s4.5 1 5.5 3"/>
-                </svg>
-                Walk
-              </button>
-              <button
-                onClick={() => onNavModeChange?.("car")}
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[13px] font-bold transition-all duration-200"
-                style={navMode === "car"
-                  ? { background: "rgba(48,128,255,0.25)", color: "#60a5fa", border: "1px solid rgba(48,128,255,0.45)" }
-                  : { color: "rgba(255,255,255,0.3)", border: "1px solid transparent" }}
-              >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="1" y="11" width="22" height="7" rx="2"/>
-                  <path d="M5 11V7a2 2 0 012-2h10a2 2 0 012 2v4"/>
-                  <circle cx="7" cy="18" r="1.5"/><circle cx="17" cy="18" r="1.5"/>
-                </svg>
-                Drive
-              </button>
-            </div>
-
-            {/* View toggle */}
-            <div className="flex rounded-2xl p-1 gap-1" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <button
-                onClick={() => setViewMode("overview")}
-                className={"px-3 py-2.5 rounded-xl text-[12px] font-bold transition-all duration-200 " +
-                  (viewMode === "overview" ? "bg-purple-600 text-white" : "text-white/30")}
-              >
-                Map
-              </button>
-              <button
-                onClick={() => setViewMode("3d")}
-                className={"px-3 py-2.5 rounded-xl text-[12px] font-bold transition-all duration-200 " +
-                  (viewMode === "3d" ? "bg-purple-600 text-white" : "text-white/30")}
-              >
-                3D
-              </button>
-            </div>
-          </div>
-        </div>
+        </>
       )}
     </div>
   );
