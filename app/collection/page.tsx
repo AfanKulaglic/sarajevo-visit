@@ -23,8 +23,7 @@ export default function CollectionPage() {
   const [navMenuLoc, setNavMenuLoc] = useState<Location | null>(null);
 
   function startNavigation(loc: Location, mode: "foot" | "car") {
-    localStorage.setItem("saraya_pending_nav", JSON.stringify({ id: loc.id, mode }));
-    router.push("/map");
+    router.push(`/map?nav=${encodeURIComponent(loc.id)}&mode=${mode}`);
   }
 
   useEffect(() => {
