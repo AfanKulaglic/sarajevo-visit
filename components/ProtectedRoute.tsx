@@ -17,7 +17,7 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
   if (loading) {
     return (
       <div className="min-h-screen bg-[#07040D] flex flex-col items-center justify-center gap-4">
-        <img src="/icons/logo.png" alt="Saraya Explore" className="w-16 h-16 object-contain" />
+        <img src="/icons/logo.svg" alt="Saraya Explore" className="w-16 h-16 object-contain" />
         <span className="spinner" />
       </div>
     );
@@ -27,3 +27,4 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
 
   return <>{children}</>;
 }
+

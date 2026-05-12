@@ -51,7 +51,7 @@ export default function LanguagePickerOverlay({ onDone }: LanguagePickerOverlayP
           className="w-14 h-14 rounded-2xl flex items-center justify-center overflow-hidden"
           style={{ background: "rgba(168,85,247,0.18)", border: "1px solid rgba(168,85,247,0.35)" }}
         >
-          <img src="/icons/logo.png" alt="Saraya Explore" className="w-full h-full object-contain" />
+          <img src="/icons/logo.svg" alt="Saraya Explore" className="w-full h-full object-contain" />
         </div>
         <span className="text-white/40 text-xs tracking-widest uppercase">Sarajevo Hotspot</span>
       </div>
@@ -139,3 +139,4 @@ export default function LanguagePickerOverlay({ onDone }: LanguagePickerOverlayP
     </div>
   );
 }
+

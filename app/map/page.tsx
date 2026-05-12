@@ -151,7 +151,7 @@ export default function MapPage() {
         {/* Header */}
         <div className="flex-none z-20 bg-[#0E0B1A]/95 backdrop-blur-xl border-b border-white/[0.05] px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <img src="/icons/logo.png" alt="Saraya Explore" className="w-[28px] h-[28px] object-contain" />
+            <img src="/icons/logo.svg" alt="Saraya Explore" className="w-[28px] h-[28px] object-contain" />
             <div>
               <h1 className="text-white font-bold text-[15px] leading-none">Sarajevo</h1>
               <p className="text-white/35 text-[11px] mt-0.5">
@@ -330,3 +330,4 @@ export default function MapPage() {
     </ProtectedRoute>
   );
 }
+
