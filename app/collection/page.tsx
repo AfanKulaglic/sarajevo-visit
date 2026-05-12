@@ -34,13 +34,20 @@ function MiniModelStrip({ loc, collected }: { loc: Location; collected: boolean 
     );
   }
   return (
-    <span
-      className={`text-[30px] transition-all duration-200 ${
+    <div
+      className={`w-10 h-10 transition-all duration-200 ${
         collected ? "" : "grayscale opacity-20"
       }`}
     >
-      {collected ? loc.emoji : "🔒"}
-    </span>
+      {collected
+        ? (loc.icon
+            ? <img src={loc.icon} alt={loc.name} className="w-full h-full object-contain" />
+            : <span className="text-[30px]">{loc.emoji}</span>)
+        : <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full text-white/40">
+            <rect x="3" y="11" width="18" height="11" rx="2"/>
+            <path d="M7 11V7a5 5 0 0110 0v4"/>
+          </svg>}
+    </div>
   );
 }
 

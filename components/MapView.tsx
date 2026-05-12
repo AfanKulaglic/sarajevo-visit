@@ -555,7 +555,11 @@ export default function MapView({
           >
             {/* Destination name + close */}
             <div className="flex items-center gap-3 px-4 pt-4 pb-2">
-              <span className="text-2xl flex-shrink-0">{navTarget.emoji}</span>
+              <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center" style={{ background: "rgba(168,85,247,0.1)", border: "1px solid rgba(168,85,247,0.15)" }}>
+                {navTarget.icon
+                  ? <img src={navTarget.icon} alt={navTarget.name} className="w-full h-full object-contain p-1" />
+                  : <span className="text-xl">{navTarget.emoji}</span>}
+              </div>
               <div className="flex-1 min-w-0">
                 <p className="text-white/50 text-[11px] font-semibold uppercase tracking-widest">
                   {navMode === "car" ? "Driving to" : "Walking to"}
