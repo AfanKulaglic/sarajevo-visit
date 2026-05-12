@@ -95,15 +95,17 @@ export default function MapPage() {
   }, []);
 
   // Handle pending navigation intent from the collection page (via ?nav=ID&mode=MODE).
-  // Wait for both GPS and locations to be ready before executing.
-  const pendingNavHandled = useRef(false);
+  // Track by ID (not boolean) so the effect re-fires if the user navigates to a different
+  // location from the collection page while the map component is still in the router cache.
+  const lastHandledNavId = useRef<string | null>(null);
   useEffect(() => {
-    if (!pendingNavId || pendingNavHandled.current) return;
+    if (!pendingNavId) return;
+    if (pendingNavId === lastHandledNavId.current) return; // already handled this specific nav
     if (!userPosition || activeLocations.length === 0) return;
-    pendingNavHandled.current = true;
+    lastHandledNavId.current = pendingNavId;
     const loc = activeLocations.find((l) => l.id === pendingNavId);
     if (loc) handleNavigateInApp(loc, pendingNavMode);
-  }, [userPosition, activeLocations]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [pendingNavId, pendingNavMode, userPosition, activeLocations]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Immediately trigger the native GPS permission prompt on mount
   useEffect(() => {
