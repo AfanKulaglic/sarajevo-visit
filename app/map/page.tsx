@@ -196,15 +196,9 @@ export default function MapPage() {
               title="Locate me"
               className="w-9 h-9 rounded-xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-white/50 hover:text-purple-400 hover:border-purple-500/30 transition-all"
             >
-              {/* GPS target / locate-me icon */}
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="4"/>
-                <circle cx="12" cy="12" r="8" strokeWidth="1.2" strokeOpacity="0.45"/>
-                <line x1="12" y1="2" x2="12" y2="5.5"/>
-                <line x1="12" y1="18.5" x2="12" y2="22"/>
-                <line x1="2" y1="12" x2="5.5" y2="12"/>
-                <line x1="18.5" y1="12" x2="22" y2="12"/>
-                <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
+              {/* Navigation arrow - my location */}
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L2 22l10-5 10 5L12 2z"/>
               </svg>
             </button>
             <div className="flex bg-white/[0.05] rounded-xl border border-white/[0.06] p-0.5">
