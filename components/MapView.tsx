@@ -66,6 +66,22 @@ function bearingToLabel(deg: number): string {
   return labels[Math.round(deg / 45) % 8];
 }
 
+// Decodes Valhalla's precision-6 encoded polyline into [lng, lat] pairs
+function decodePolyline6(encoded: string): [number, number][] {
+  const coords: [number, number][] = [];
+  let index = 0, lat = 0, lng = 0;
+  while (index < encoded.length) {
+    let result = 0, shift = 0, b: number;
+    do { b = encoded.charCodeAt(index++) - 63; result |= (b & 0x1f) << shift; shift += 5; } while (b >= 0x20);
+    lat += result & 1 ? ~(result >> 1) : result >> 1;
+    result = 0; shift = 0;
+    do { b = encoded.charCodeAt(index++) - 63; result |= (b & 0x1f) << shift; shift += 5; } while (b >= 0x20);
+    lng += result & 1 ? ~(result >> 1) : result >> 1;
+    coords.push([lng / 1e6, lat / 1e6]);
+  }
+  return coords;
+}
+
 interface MapViewProps {
   locations: Location[];
   collectedItems: string[];
@@ -364,17 +380,47 @@ export default function MapView({
 
       if (userPosition) {
         try {
-          const profile = navMode === "car" ? "driving" : "foot";
-          const url =
-            `https://router.project-osrm.org/route/v1/${profile}/` +
-            `${userPosition.lng},${userPosition.lat};${navTarget.lng},${navTarget.lat}` +
-            "?overview=full&geometries=geojson";
-          const res = await fetch(url);
-          if (!cancelled && res.ok) {
-            const data = await res.json();
-            coords = data?.routes?.[0]?.geometry?.coordinates ?? [];
-            const dist = data?.routes?.[0]?.distance;
-            if (typeof dist === "number") setRouteDistanceM(dist);
+          if (navMode === "car") {
+            // OSRM driving: follows one-way streets, turn restrictions, traffic rules
+            const url =
+              `https://router.project-osrm.org/route/v1/driving/` +
+              `${userPosition.lng},${userPosition.lat};${navTarget.lng},${navTarget.lat}` +
+              "?overview=full&geometries=geojson";
+            const res = await fetch(url);
+            if (!cancelled && res.ok) {
+              const data = await res.json();
+              coords = data?.routes?.[0]?.geometry?.coordinates ?? [];
+              const dist = data?.routes?.[0]?.distance;
+              if (typeof dist === "number") setRouteDistanceM(dist);
+            }
+          } else {
+            // Valhalla pedestrian: uses pedestrian paths, parks, living streets;
+            // not restricted by traffic signs or one-way rules
+            const res = await fetch("https://valhalla1.openstreetmap.de/route", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                locations: [
+                  { lon: userPosition.lng, lat: userPosition.lat },
+                  { lon: navTarget.lng, lat: navTarget.lat },
+                ],
+                costing: "pedestrian",
+                costing_options: {
+                  pedestrian: {
+                    use_living_streets: 1.0,
+                    use_tracks: 0.5,
+                    shortest: false,
+                  },
+                },
+              }),
+            });
+            if (!cancelled && res.ok) {
+              const data = await res.json();
+              const shape: string | undefined = data?.trip?.legs?.[0]?.shape;
+              const dist: number | undefined = data?.trip?.summary?.length; // km
+              if (shape) coords = decodePolyline6(shape);
+              if (typeof dist === "number") setRouteDistanceM(dist * 1000);
+            }
           }
         } catch {
           // fallback to straight line
