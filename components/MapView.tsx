@@ -482,7 +482,7 @@ export default function MapView({
 
       {navTarget && (
         <div
-          className="absolute bottom-4 left-3 right-3 z-[1000] rounded-3xl"
+          className="absolute bottom-24 left-3 right-3 z-[1000] rounded-3xl"
           style={{
             background: "rgba(14,11,26,0.96)",
             border: navMode === "car" ? "1px solid rgba(48,128,255,0.4)" : "1px solid rgba(168,85,247,0.4)",
