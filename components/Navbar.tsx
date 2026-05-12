@@ -418,7 +418,7 @@ export default function Navbar() {
           BOTTOM NAV — 3 tabs: Map · Collection · Settings
       ══════════════════════════════════════════════════════════════ */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 select-none">
-        <div className="absolute inset-0 bg-[#0a0d14]/95 backdrop-blur-xl border-t border-white/[0.05]" />
+        <div className="absolute inset-0 bg-[#0E0B1A]/95 backdrop-blur-xl border-t border-white/[0.05]" />
         <div
           className="relative flex items-stretch justify-around max-w-md mx-auto"
           style={{ paddingTop: "8px", paddingBottom: "max(12px, env(safe-area-inset-bottom, 12px))" }}
