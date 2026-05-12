@@ -113,6 +113,7 @@ export default function MapView({
   const [mapReady, setMapReady] = useState(false);
   const [viewMode, setViewMode] = useState<"overview" | "3d">("overview");
   const [routeDistanceM, setRouteDistanceM] = useState<number | null>(null);
+  const prevPositionRef = useRef<GpsPosition | null>(null);
 
   const bearing = useMemo(() => {
     if (!userPosition || !navTarget) return 0;
@@ -293,16 +294,21 @@ export default function MapView({
       if (cancelled || !mapRef.current) return;
 
       const is3d = viewMode === "3d" && !!navTarget;
+      const isMoving = prevPositionRef.current !== null &&
+        (prevPositionRef.current.lat !== userPosition.lat || prevPositionRef.current.lng !== userPosition.lng);
+      prevPositionRef.current = userPosition;
 
       if (userMarkerRef.current) {
         userMarkerRef.current.setLngLat([userPosition.lng, userPosition.lat]);
         applyUserMarkerStyle(
           userMarkerRef.current.getElement() as HTMLElement,
-          is3d
+          is3d,
+          navMode,
+          isMoving
         );
       } else {
         const el = document.createElement("div");
-        applyUserMarkerStyle(el, is3d);
+        applyUserMarkerStyle(el, is3d, navMode, isMoving);
         userMarkerRef.current = new maplibregl.Marker({
           element: el,
           anchor: "center",
@@ -325,7 +331,7 @@ export default function MapView({
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapReady, userPosition, viewMode, navTarget]);
+  }, [mapReady, userPosition, viewMode, navTarget, navMode]);
 
   // View-mode switch
   useEffect(() => {
@@ -610,17 +616,52 @@ export default function MapView({
   );
 }
 
-function applyUserMarkerStyle(el: HTMLElement, is3d: boolean) {
-  if (is3d) {
+function applyUserMarkerStyle(el: HTMLElement, is3d: boolean, navMode: "foot" | "car" = "foot", isMoving = false) {
+  if (is3d && navMode === "foot") {
+    // Walking person SVG — arm/leg animation when moving
+    const animStyle = isMoving
+      ? `<style>
+          @keyframes walkArm{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(30deg)}}
+          @keyframes walkLeg{0%,100%{transform:rotate(30deg)}50%{transform:rotate(-30deg)}}
+          .wa{transform-origin:10px 14px;animation:walkArm 0.5s ease-in-out infinite}
+          .wb{transform-origin:10px 14px;animation:walkArm 0.5s ease-in-out infinite reverse}
+          .wc{transform-origin:10px 22px;animation:walkLeg 0.5s ease-in-out infinite}
+          .wd{transform-origin:10px 22px;animation:walkLeg 0.5s ease-in-out infinite reverse}
+        </style>` : "";
+    el.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="44" viewBox="0 0 20 32">
+        ${animStyle}
+        <circle cx="10" cy="4" r="3" fill="#c084fc" stroke="white" stroke-width="0.8"/>
+        <line x1="10" y1="7" x2="10" y2="18" stroke="#c084fc" stroke-width="2" stroke-linecap="round"/>
+        <line class="wa" x1="10" y1="11" x2="4" y2="17" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round"/>
+        <line class="wb" x1="10" y1="11" x2="16" y2="17" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round"/>
+        <line class="wc" x1="10" y1="18" x2="5" y2="27" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round"/>
+        <line class="wd" x1="10" y1="18" x2="15" y2="27" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>`;
     el.style.cssText = [
-      "width:0",
-      "height:0",
-      "border-left:11px solid transparent",
-      "border-right:11px solid transparent",
-      "border-bottom:30px solid #a855f7",
+      "width:36px",
+      "height:44px",
       "filter:drop-shadow(0 0 8px rgba(168,85,247,0.9))",
     ].join(";");
+  } else if (is3d && navMode === "car") {
+    // Car SVG top-down view
+    el.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="44" viewBox="0 0 24 32">
+        <rect x="4" y="2" width="16" height="28" rx="5" fill="#3080ff" stroke="white" stroke-width="0.8"/>
+        <rect x="5" y="7" width="14" height="9" rx="2" fill="rgba(255,255,255,0.25)"/>
+        <rect x="2" y="6" width="3" height="5" rx="1.5" fill="rgba(255,255,255,0.15)"/>
+        <rect x="19" y="6" width="3" height="5" rx="1.5" fill="rgba(255,255,255,0.15)"/>
+        <rect x="2" y="21" width="3" height="5" rx="1.5" fill="rgba(255,255,255,0.1)"/>
+        <rect x="19" y="21" width="3" height="5" rx="1.5" fill="rgba(255,255,255,0.1)"/>
+        <rect x="8" y="25" width="8" height="3" rx="1" fill="rgba(255,100,100,0.7)"/>
+      </svg>`;
+    el.style.cssText = [
+      "width:36px",
+      "height:44px",
+      "filter:drop-shadow(0 0 8px rgba(48,128,255,0.9))",
+    ].join(";");
   } else {
+    el.innerHTML = "";
     el.style.cssText = [
       "width:20px",
       "height:20px",
