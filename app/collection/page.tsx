@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Navbar from "@/components/Navbar";
 import LandmarkDetail from "@/components/LandmarkDetail";
@@ -9,8 +10,20 @@ import { subscribeLocations } from "@/lib/locationStorage";
 import { useGame } from "@/context/GameContext";
 import { useLanguage } from "@/context/LanguageContext";
 
+// Dynamically import the WebGL viewer so it never runs on the server
+const ObjModelViewer = dynamic(() => import("@/components/ObjModelViewer"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="w-6 h-6 rounded-full border-2 border-purple-500/40 border-t-purple-500 animate-spin" />
+    </div>
+  ),
+});
 
+// ── Mini model strip (list row thumbnail) ──────────────────────────────────────
+// Uses emoji only — no WebGL Canvas per row (avoids context limit + crash)
 
+function MiniModelStrip({ loc, collected }: { loc: Location; collected: boolean }) {
 // ── Collection page ────────────────────────────────────────────────────────────
 
 export default function CollectionPage() {
@@ -106,8 +119,8 @@ export default function CollectionPage() {
           </div>
         )}
 
-        {/* ── Landmark list ── */}
-        <div className="px-4 pt-4 pb-32 space-y-2">
+        {/* ── Landmark grid ── */}
+        <div className="px-4 pt-4 pb-32 grid grid-cols-2 gap-3">
           {activeLocations.map((loc, idx) => {
             const collected = hasCollected(loc.reward);
             const locContent = getLocContent(loc);
@@ -116,97 +129,50 @@ export default function CollectionPage() {
                 key={loc.id}
                 onClick={() => collected && setSelectedLoc(loc)}
                 disabled={!collected}
-                className={`w-full text-left rounded-2xl border overflow-hidden transition-all duration-200 group ${
+                className={`relative aspect-square rounded-2xl overflow-hidden border transition-all duration-200 ${
                   collected
-                    ? "bg-[#0E0B1A] border-white/[0.07] hover:border-purple-500/[0.15] active:scale-[0.99]"
-                    : "bg-[#07090f] border-white/[0.04]"
+                    ? "border-purple-500/[0.15] active:scale-[0.97]"
+                    : "border-white/[0.05]"
                 }`}
+                style={{ background: "#0E0B1A" }}
               >
-                <div className="flex items-stretch" style={{ minHeight: 88 }}>
-                  {/* Image thumbnail */}
-                  <div className="w-[80px] flex-shrink-0 relative overflow-hidden bg-black">
-                    {loc.icon ? (
-                      <img
-                        src={loc.icon}
-                        alt={locContent.name}
-                        className="absolute inset-0 w-full h-full object-cover"
-                        style={{
-                          filter: collected
-                            ? "brightness(1) saturate(1)"
-                            : "brightness(0.07) saturate(0) contrast(1.4)",
-                          transition: "filter 0.5s ease",
-                        }}
-                      />
-                    ) : (
-                      <div className="absolute inset-0 bg-[#050609]" />
-                    )}
-                    {!collected && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div
-                          className="w-8 h-8 rounded-xl flex items-center justify-center"
-                          style={{ background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
-                        >
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <rect x="3" y="11" width="18" height="11" rx="2"/>
-                            <path d="M7 11V7a5 5 0 0110 0v4"/>
-                          </svg>
-                        </div>
-                      </div>
-                    )}
-                    <div className="absolute right-0 inset-y-0 w-px bg-white/[0.05]" />
-                  </div>
+                {/* Artwork: silhouette when locked, full color when unlocked */}
+                {loc.icon && (
+                  <img
+                    src={loc.icon}
+                    alt={locContent.name}
+                    draggable={false}
+                    className="absolute inset-0 w-full h-full object-contain p-5 select-none"
+                    style={
+                      collected
+                        ? { opacity: 1 }
+                        : { filter: "brightness(0) invert(1)", opacity: 0.22 }
+                    }
+                  />
+                )}
 
-                  {/* Text content */}
-                  <div className="flex-1 px-4 py-3.5 flex flex-col justify-center min-w-0">
-                    <div className="flex items-center justify-between gap-2 mb-0.5">
-                      <span
-                        className={`font-semibold text-[14px] tracking-tight leading-tight truncate ${
-                          collected ? "text-white" : "text-white/22"
-                        }`}
-                      >
-                        {locContent.name}
-                      </span>
-                      {collected ? (
-                        <svg
-                          className="text-white/18 group-hover:text-purple-500/40 transition-colors flex-shrink-0"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 14 14"
-                          fill="none"
-                        >
-                          <path
-                            d="M5 2.5l4.5 4.5L5 11.5"
-                            stroke="currentColor"
-                            strokeWidth="1.6"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      ) : (
-                        <span className="text-[10px] font-bold text-white/12 flex-shrink-0 tabular-nums">
-                          {String(idx + 1).padStart(2, "0")}
-                        </span>
-                      )}
-                    </div>
-                    <p
-                      className={`text-[12px] leading-snug line-clamp-2 ${
-                        collected ? "text-white/32" : "text-white/12"
-                      }`}
-                    >
-                      {locContent.description}
-                    </p>
-                    {collected && (
-                      <p className="text-[10px] font-semibold text-purple-500/35 mt-1.5 tracking-[0.06em] uppercase">
-                        {t("btn_read_story")}
-                      </p>
-                    )}
-                  </div>
+                {/* Number badge */}
+                <div className="absolute top-2.5 right-3">
+                  <span className={`text-[9px] font-bold tabular-nums tracking-wider ${
+                    collected ? "text-purple-400/40" : "text-white/12"
+                  }`}>
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
                 </div>
 
-                {/* Bottom accent for collected */}
-                {collected && (
-                  <div className="h-px bg-gradient-to-r from-purple-500/[0.15] via-purple-500/[0.06] to-transparent" />
-                )}
+                {/* Bottom gradient + name */}
+                <div
+                  className="absolute bottom-0 left-0 right-0 px-3 pt-8 pb-3"
+                  style={{
+                    background: "linear-gradient(to top, rgba(7,4,13,0.97) 0%, rgba(7,4,13,0.6) 55%, transparent 100%)",
+                  }}
+                >
+                  <p className={`text-[11px] font-semibold leading-tight text-center ${
+                    collected ? "text-white/80" : "text-white/18"
+                  }`}>
+                    {locContent.name}
+                  </p>
+                </div>
               </button>
             );
           })}
