@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useState, useCallback, useEffect, useRef } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Navbar from "@/components/Navbar";
-import LocationCard from "@/components/LocationCard";
+import LocationCard, { NavMenu } from "@/components/LocationCard";
 import LandmarkDetail from "@/components/LandmarkDetail";
 import OnboardingOverlay from "@/components/OnboardingOverlay";
 import LanguagePickerOverlay from "@/components/LanguagePickerOverlay";
@@ -43,6 +43,8 @@ export default function MapPage() {
   const [discoveredLoc, setDiscoveredLoc] = useState<Location | null>(null);
   const [navTarget, setNavTarget] = useState<Location | null>(null);
   const [navMode, setNavMode] = useState<"foot" | "car">("foot");
+  const [outOfRangeLoc, setOutOfRangeLoc] = useState<{ loc: Location; dist: number } | null>(null);
+  const [navMenuLoc, setNavMenuLoc] = useState<Location | null>(null);
   const [mapTheme, setMapTheme] = useState<"dark" | "light">(() => {
     if (typeof window !== "undefined") {
       return (localStorage.getItem("saraya_map_theme") as "dark" | "light") || "dark";
@@ -171,7 +173,7 @@ export default function MapPage() {
             setDiscoveredLoc(location);
           }
         } else {
-          showToast(`You are ${dist}m away. Get within 50m to unlock!`, "error");
+          setOutOfRangeLoc({ loc: location, dist: Math.round(dist) });
         }
       } catch (err) {
         showToast(err instanceof Error ? err.message : "Location check failed.", "error");
@@ -350,6 +352,85 @@ export default function MapPage() {
 
         <Navbar />
       </div>
+
+      {/* Out-of-range sheet — shown when marker is tapped but user is too far */}
+      {outOfRangeLoc && !navMenuLoc && (
+        <div
+          className="fixed inset-0 z-[80] flex flex-col justify-end"
+          style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)", animation: "fadeIn 0.22s ease both" }}
+          onClick={() => setOutOfRangeLoc(null)}
+        >
+          <div
+            className="w-full max-w-md mx-auto rounded-t-3xl overflow-hidden"
+            style={{
+              background: "#0E0B1A",
+              border: "1px solid rgba(255,255,255,0.06)",
+              borderBottom: "none",
+              animation: "slideUp 0.38s cubic-bezier(0.22,1,0.36,1) both",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Location header */}
+            <div className="flex items-center gap-4 px-5 pt-6 pb-5">
+              <div className="w-14 h-14 rounded-2xl flex-shrink-0 overflow-hidden flex items-center justify-center"
+                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
+                {outOfRangeLoc.loc.icon
+                  ? <img src={outOfRangeLoc.loc.icon} alt={outOfRangeLoc.loc.name}
+                      className="w-full h-full object-contain p-2"
+                      style={{ filter: "brightness(0) invert(1)", opacity: 0.35 }} />
+                  : <span className="text-2xl opacity-40">{outOfRangeLoc.loc.emoji}</span>}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-white font-bold text-[15px] leading-tight truncate">
+                  {outOfRangeLoc.loc.name}
+                </p>
+                <div className="flex items-center gap-2 mt-1.5">
+                  <span className="text-[11px] font-bold text-red-400/80 bg-red-500/[0.10] border border-red-500/[0.18] px-2 py-0.5 rounded-full">
+                    {outOfRangeLoc.dist}m away
+                  </span>
+                  <span className="text-white/30 text-[11px]">Need to be within 50m</span>
+                </div>
+              </div>
+              <button
+                onClick={() => setOutOfRangeLoc(null)}
+                className="w-8 h-8 rounded-full flex items-center justify-center text-white/40 hover:text-white/70 flex-shrink-0 transition-colors"
+                style={{ background: "rgba(255,255,255,0.06)" }}
+              >
+                <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <path d="M2 2l10 10M12 2L2 12"/>
+                </svg>
+              </button>
+            </div>
+
+            {/* Divider */}
+            <div className="h-px bg-white/[0.05] mx-5" />
+
+            {/* Navigate CTA */}
+            <div className="px-5 py-5">
+              <p className="text-white/40 text-[12px] mb-3">This location is locked. Get closer to check in, or navigate there now.</p>
+              <button
+                onClick={() => setNavMenuLoc(outOfRangeLoc.loc)}
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-[14px] font-bold transition-all active:scale-[0.98]"
+                style={{ background: "rgba(139,92,246,0.18)", border: "1px solid rgba(139,92,246,0.35)", color: "#c084fc" }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L2 22l10-5 10 5L12 2z"/>
+                </svg>
+                Navigate
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* NavMenu — same component as collection + map list */}
+      {navMenuLoc && (
+        <NavMenu
+          loc={navMenuLoc}
+          onClose={() => { setNavMenuLoc(null); setOutOfRangeLoc(null); }}
+          onNavigate={(loc, mode) => { setNavMenuLoc(null); setOutOfRangeLoc(null); handleNavigateInApp(loc, mode); }}
+        />
+      )}
 
       {/* Landmark detail overlay — opens immediately on check-in */}
       {discoveredLoc && (
